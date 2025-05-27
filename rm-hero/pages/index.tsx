@@ -40,13 +40,12 @@ export default function IndexPage() {
           
           <div className="max-w-xl flex flex-col items-center md:items-start gap-4">
             <h1 className={title()}>
-              Discover the <span className={title({ color: "yellow" })}>best</span>
-              <br />
-              players for your fantasy pickleball team
-      </h1>
+              The <span className={title({ color: "yellow" })}> smartest </span> way to draft your 
+              <span className={title({ color: "yellow" })}> MLP </span> fantasy team starts here.
+              </h1>
 
       <p className={`${subtitle()}`}>
-        Built for the stats-driven MLP fan
+        Built for the stats-driven pickleball fan
         </p>
 
         <Button className="transition-transform duration-200 hover:scale-105" color="primary" size="lg">
