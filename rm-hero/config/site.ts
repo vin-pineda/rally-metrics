@@ -5,9 +5,10 @@ export const siteConfig = {
   description: "Organized MLP data to help you draft the best fantasy pickleball team, backed by real stats.",
   navItems: [
     {
-      label: "Home",
-      href: "/",
+      label: "Teams",
+      href: "/teams"
     },
+    
     {
       label: "About",
       href: "/about",

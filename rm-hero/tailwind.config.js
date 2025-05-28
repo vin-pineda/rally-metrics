@@ -1,6 +1,6 @@
-import {heroui} from "@heroui/theme"
+import { heroui } from "@heroui/theme";
 
-/** @type {import('tailwindcss').Config} */
+{import('tailwindcss').Config}
 const config = {
   content: [
     './layouts/**/*.{js,ts,jsx,tsx,mdx}',
@@ -14,10 +14,19 @@ const config = {
         sans: ["var(--font-sans)"],
         mono: ["var(--font-mono)"],
       },
+      animation: {
+        float: "float 6s ease-in-out infinite",
+      },
+      keyframes: {
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
+      },
     },
   },
   darkMode: "class",
   plugins: [heroui()],
-}
+};
 
 export default config;
