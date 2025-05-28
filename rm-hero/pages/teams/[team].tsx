@@ -54,6 +54,25 @@ const slugToLogoFilename: Record<string, string> = {
   "new-york-hustlers": "new_york_hustlers.png",
 };
 
+const teamColors: Record<string, { text: string; border: string; thead: string }> = {
+  "atlanta-bouncers": { text: "text-orange-500", border: "border-orange-500", thead: "bg-orange-500/20 text-orange-900" },
+  "brooklyn-pickleball-team": { text: "text-gray-700", border: "border-gray-700", thead: "bg-gray-700/20 text-gray-700" },
+  "carolina-hogs": { text: "text-red-500", border: "border-red-500", thead: "bg-red-500/20 text-red-900" },
+  "chicago-slice": { text: "text-red-600", border: "border-red-600", thead: "bg-red-600/20 text-red-600" },
+  "columbus-sliders": { text: "text-blue-600", border: "border-blue-600", thead: "bg-blue-600/20 text-blue-600" },
+  "dallas-flash": { text: "text-sky-500", border: "border-sky-500", thead: "bg-sky-500/20 text-sky-900" },
+  "la-mad-drops": { text: "text-teal-500", border: "border-teal-500", thead: "bg-teal-500/20 text-teal-900" },
+  "miami-pickleball-team": { text: "text-pink-500", border: "border-pink-500", thead: "bg-pink-500/20 text-pink-900" },
+  "nj-fives": { text: "text-indigo-600", border: "border-indigo-600", thead: "bg-indigo-600/20 text-indigo-600" },
+  "orlando-squeeze": { text: "text-yellow-500", border: "border-yellow-500", thead: "bg-yellow-500/20 text-yellow-900" },
+  "phoenix-flames": { text: "text-red-500", border: "border-red-500", thead: "bg-red-500/20 text-red-900" },
+  "socal-hard-eights": { text: "text-sky-500", border: "border-sky-500", thead: "bg-sky-500/20 text-sky-900" },
+  "stl-shock": { text: "text-blue-600", border: "border-blue-600", thead: "bg-blue-600/20 text-blue-600" },
+  "texas-ranchers": { text: "text-blue-600", border: "border-blue-600", thead: "bg-blue-600/20 text-blue-600" },
+  "utah-black-diamonds": { text: "text-gray-700", border: "border-gray-700", thead: "bg-gray-700/20 text-gray-700" },
+  "new-york-hustlers": { text: "text-cyan-500", border: "border-cyan-500", thead: "bg-cyan-500/20 text-cyan-900" },
+};
+
 export default function TeamPage() {
   const router = useRouter();
   const { team } = router.query;
@@ -63,6 +82,11 @@ export default function TeamPage() {
   const slug = team?.toString() || "";
   const backendTeamName = slugToBackendName[slug] || "";
   const logoFilename = slugToLogoFilename[slug] || "";
+  const teamStyle = teamColors[slug] || {
+    text: "text-orange-500",
+    border: "border-orange-500",
+    thead: "bg-orange-500/20 text-orange-900",
+  };
 
   useEffect(() => {
     if (backendTeamName) {
@@ -81,89 +105,74 @@ export default function TeamPage() {
 
   return (
     <DefaultLayout>
-      {/* Floating visuals */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+      <div className="relative overflow-hidden min-h-screen">
+        {/* Animated visuals */}
         <motion.div
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-          className="absolute w-96 h-96 bg-yellow-400 opacity-10 rounded-full blur-3xl bottom-[-150px] right-[-150px]"
-        />
-        {[
-          { src: "/rm/racket.png", style: { top: "20%", left: "5%" } },
-          { src: "/rm/pickleball.png", style: { bottom: "15%", right: "7.5%" } },
-        ].map((item, idx) => (
-          <motion.div
-            key={idx}
-            className="absolute z-20 transition-transform hover:scale-110"
-            animate={{ y: [0, -30, 0] }}
-            transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-            style={item.style}
-          >
-            <Image src={item.src} alt="Decoration" width={150} height={150} className="object-contain" />
-          </motion.div>
-        ))}
-      </div>
+          className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <div className="absolute w-80 h-80 bg-yellow-400 opacity-10 blur-3xl bottom-[-100px] left-[-100px] rounded-full" />
+        </motion.div>
 
-      {/* Main content */}
-      <div className="p-8 flex flex-col md:flex-row gap-12 items-start min-h-screen z-10 relative">
-        {/* Left Panel */}
-        <div className="md:w-1/3 w-full text-center md:text-left">
-          <div className="border-5 border-orange-300 dark:border-orange-500 rounded-xl inline-block mx-auto mb-6 hover:scale-105 transition-transform duration-300">
-
-            <Image
-              src={`/teams/${logoFilename}`}
-              alt={`${backendTeamName} Logo`}
-              width={300}
-              height={300}
-              className="object-contain bg-white dark:bg-neutral-900 rounded-lg"
-            />
-          </div>
-          <h1 className="text-4xl font-bold text-orange-500 capitalize mb-3">
-            {backendTeamName}
-          </h1>
-          <p className="text-gray-700 dark:text-gray-300">
-            Welcome to the <strong>{backendTeamName}</strong> team page! Explore player stats and dominate your fantasy league with precision insights.
-          </p>
-        </div>
-
-        {/* Table */}
-        <div className="md:w-2/3 w-full">
-          {loading ? (
-            <p className="text-center text-orange-500 text-lg">Loading player stats...</p>
-          ) : players.length === 0 ? (
-            <p className="text-center text-gray-500 dark:text-gray-400 text-lg">No players found for this team.</p>
-          ) : (
-            <div className="overflow-x-auto rounded-xl shadow-lg border dark:border-neutral-800">
-              <table className="min-w-full w-full text-sm text-left bg-white dark:bg-neutral-900 text-gray-800 dark:text-gray-200">
-                <thead className="bg-orange-200 dark:bg-orange-500/20 text-orange-900 dark:text-orange-300">
-                  <tr>
-                    <th className="px-4 py-3">Name</th>
-                    <th className="px-4 py-3">Rank</th>
-                    <th className="px-4 py-3">W</th>
-                    <th className="px-4 py-3">L</th>
-                    <th className="px-4 py-3">Win %</th>
-                    <th className="px-4 py-3">Pts Won</th>
-                    <th className="px-4 py-3">Pts Lost</th>
-                    <th className="px-4 py-3">Pts %</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {players.map((player) => (
-                    <tr key={player.name} className="even:bg-gray-50 dark:even:bg-neutral-800/50">
-                      <td className="px-4 py-3 font-medium">{player.name}</td>
-                      <td className="px-4 py-3">{player.rank}</td>
-                      <td className="px-4 py-3">{player.games_won}</td>
-                      <td className="px-4 py-3">{player.games_lost}</td>
-                      <td className="px-4 py-3">{player.games_won_percent.toFixed(1)}%</td>
-                      <td className="px-4 py-3">{player.pts_won}</td>
-                      <td className="px-4 py-3">{player.pts_lost}</td>
-                      <td className="px-4 py-3">{player.pts_won_percent.toFixed(1)}%</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        {/* Main layout */}
+        <div className="relative z-10 p-10 flex flex-col md:flex-row gap-16 justify-center items-start">
+          {/* Team Logo + Info */}
+          <div className="md:w-1/3 w-full text-center md:text-left">
+            <div className={`border-8 ${teamStyle.border} rounded-xl transition-transform hover:scale-105`}>
+              <Image
+                src={`/teams/${logoFilename}`}
+                alt={`${backendTeamName} Logo`}
+                width={350}
+                height={350}
+                className="rounded-lg"
+              />
             </div>
-          )}
+            <h1 className={`mt-6 text-4xl font-bold capitalize ${teamStyle.text}`}>{backendTeamName}</h1>
+            <p className="text-gray-700 dark:text-gray-300 mt-2 leading-relaxed">
+              Welcome to the <strong>{backendTeamName}</strong> team page. Dive into stats and dominate your fantasy draft.
+            </p>
+          </div>
+
+          {/* Player Stats */}
+          <div className="md:w-2/3 w-full">
+            {loading ? (
+              <p className={`${teamStyle.text} text-center text-lg`}>Loading player stats...</p>
+            ) : players.length === 0 ? (
+              <p className="text-center text-gray-500 dark:text-gray-400 text-lg">No players found for this team.</p>
+            ) : (
+              <div className="overflow-x-auto rounded-xl shadow-lg border dark:border-neutral-800">
+                <table className="w-full text-md bg-white dark:bg-neutral-800 text-gray-800 dark:text-white">
+                  <thead className={`${teamStyle.thead} dark:bg-neutral-700`}>
+                    <tr>
+                      <th className="px-6 py-4">Name</th>
+                      <th className="px-6 py-4">Rank</th>
+                      <th className="px-6 py-4">W</th>
+                      <th className="px-6 py-4">L</th>
+                      <th className="px-6 py-4">Win %</th>
+                      <th className="px-6 py-4">Pts Won</th>
+                      <th className="px-6 py-4">Pts Lost</th>
+                      <th className="px-6 py-4">Pts %</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {players.map((player) => (
+                      <tr key={player.name} className="even:bg-gray-50 dark:even:bg-neutral-700/50">
+                        <td className="px-6 py-4 font-semibold">{player.name}</td>
+                        <td className="px-6 py-4">{player.rank}</td>
+                        <td className="px-6 py-4">{player.games_won}</td>
+                        <td className="px-6 py-4">{player.games_lost}</td>
+                        <td className="px-6 py-4">{player.games_won_percent.toFixed(1)}%</td>
+                        <td className="px-6 py-4">{player.pts_won}</td>
+                        <td className="px-6 py-4">{player.pts_lost}</td>
+                        <td className="px-6 py-4">{player.pts_won_percent.toFixed(1)}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </DefaultLayout>
