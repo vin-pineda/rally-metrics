@@ -143,9 +143,9 @@ export default function IndexPage() {
               delay: 0,
             },
             {
-              title: "Draft Tools",
+              title: "AI-Powered",
               description:
-                "Get edge with algorithm-backed projections and comparisons.",
+                "Gain an edge with AI-powered analysis and fantasy draft recommendations",
               icon: <Wand2 className="text-orange-500 w-8 h-8" />,
               delay: 0.1,
             },
