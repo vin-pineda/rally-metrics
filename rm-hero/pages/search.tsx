@@ -2,8 +2,9 @@
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import DefaultLayout from "@/layouts/default";
 import { motion } from "framer-motion";
+
+import DefaultLayout from "@/layouts/default";
 
 type Player = {
   name: string;
@@ -27,6 +28,7 @@ export default function SearchPage() {
 
   useEffect(() => {
     const query = new URLSearchParams();
+
     if (name) query.append("name", (name as string).toLowerCase());
     if (team) query.append("team", (team as string).toLowerCase());
 
@@ -34,6 +36,7 @@ export default function SearchPage() {
       .then(async (res) => {
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         const text = await res.text();
+
         return text ? JSON.parse(text) : [];
       })
       .then((data) => {
@@ -41,13 +44,13 @@ export default function SearchPage() {
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Failed to fetch players:", err);
         setLoading(false);
       });
   }, [name, team]);
 
   const toggleSummary = async (player: Player) => {
     const isExpanded = expandedPlayer === player.name;
+
     setExpandedPlayer(isExpanded ? null : player.name);
 
     if (!summaries[player.name]) {
@@ -56,6 +59,7 @@ export default function SearchPage() {
           `http://localhost:8080/api/v1/player/${encodeURIComponent(player.name)}/summary`
         );
         const text = await res.text();
+
         setSummaries((prev) => ({ ...prev, [player.name]: text }));
       } catch (err) {
         setSummaries((prev) => ({
@@ -70,7 +74,7 @@ export default function SearchPage() {
     <DefaultLayout>
       <div className="p-6 md:p-10 min-h-screen">
         <h1 className="text-3xl font-bold mb-6">
-          Search Results for "{name}"
+          Search Results for &quot;{name}&quot;
           {team ? ` on team "${team}"` : ""}
         </h1>
 
@@ -82,16 +86,16 @@ export default function SearchPage() {
           </p>
         ) : (
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
             className="overflow-x-auto scrollbar-hide rounded-xl shadow-lg border dark:border-neutral-800"
+            initial={{ opacity: 0, y: 40 }}
+            transition={{ duration: 0.6 }}
           >
             <table className="w-full text-md bg-white dark:bg-neutral-800 text-gray-800 dark:text-white">
               <thead className="sticky top-0 z-20 shadow-md bg-gray-100 dark:bg-neutral-700 dark:text-white">
                 <tr>
                   <th className="px-6 py-4">Player</th>
-                  <th className="w-6"></th>
+                  <th className="w-6" />
                   <th className="px-6 py-4">Team</th>
                   <th className="px-6 py-4">Rank</th>
                   <th className="px-6 py-4">W</th>
@@ -137,8 +141,8 @@ export default function SearchPage() {
                     {expandedPlayer === player.name && (
                       <tr>
                         <td
-                          colSpan={10}
                           className="px-6 py-4 italic text-gray-600 dark:text-gray-300 bg-neutral-50 dark:bg-neutral-700 whitespace-pre-line"
+                          colSpan={10}
                         >
                           {summaries[player.name] || "Loading summary..."}
                         </td>

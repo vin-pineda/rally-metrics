@@ -7,7 +7,6 @@ import {
   NavbarItem,
   NavbarMenuItem,
 } from "@heroui/navbar";
-
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Link } from "@heroui/link";
@@ -31,34 +30,33 @@ export const Navbar = () => {
     router.push(`/search?name=${encodeURIComponent(searchText.trim())}`);
   };
 
- const searchInput = (
-  <form
-    onSubmit={(e) => {
-      e.preventDefault();
-      if (searchText.trim()) {
-        router.push(`/search?name=${encodeURIComponent(searchText.trim())}`);
-      }
-    }}
-    className="w-full"
-  >
-    <Input
-      aria-label="Search"
-      value={searchText}
-      onChange={(e) => setSearchText(e.target.value)}
-      classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
+  const searchInput = (
+    <form
+      className="w-full"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (searchText.trim()) {
+          router.push(`/search?name=${encodeURIComponent(searchText.trim())}`);
+        }
       }}
-      labelPlacement="outside"
-      placeholder="Find Players"
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-      }
-      type="search"
-    />
-  </form>
-);
-
+    >
+      <Input
+        aria-label="Search"
+        classNames={{
+          inputWrapper: "bg-default-100",
+          input: "text-sm",
+        }}
+        labelPlacement="outside"
+        placeholder="Find Players"
+        startContent={
+          <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+        }
+        type="search"
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+      />
+    </form>
+  );
 
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
@@ -66,11 +64,11 @@ export const Navbar = () => {
         <NavbarBrand className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <img
-              src="/rm/rm.png"
               alt="Rally Metrics Logo"
-              width={36}
-              height={36}
               className="object-contain"
+              height={36}
+              src="/rm/rm.png"
+              width={36}
             />
             <p className="font-bold text-inherit">Rally Metrics</p>
           </NextLink>
@@ -81,7 +79,7 @@ export const Navbar = () => {
               <NextLink
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium"
+                  "data-[active=true]:text-primary data-[active=true]:font-medium",
                 )}
                 color="foreground"
                 href={item.href}
@@ -110,11 +108,11 @@ export const Navbar = () => {
             variant="flat"
           >
             <img
-              src="/mlp/mlp.png"
               alt="Major League Pickleball Logo"
-              width={36}
-              height={36}
               className="object-contain"
+              height={36}
+              src="/mlp/mlp.png"
+              width={36}
             />
             Major League Pickleball
           </Button>
@@ -139,8 +137,8 @@ export const Navbar = () => {
                   index === 2
                     ? "primary"
                     : index === siteConfig.navMenuItems.length - 1
-                    ? "danger"
-                    : "foreground"
+                      ? "danger"
+                      : "foreground"
                 }
                 href={item.href}
                 size="lg"

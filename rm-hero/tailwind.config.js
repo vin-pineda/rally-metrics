@@ -26,10 +26,7 @@ const config = {
       },
     },
   },
-  plugins: [
-    heroui(),
-    require("tailwind-scrollbar-hide"),
-  ],
+  plugins: [heroui(), require("tailwind-scrollbar-hide")],
 };
 
 export default config;
