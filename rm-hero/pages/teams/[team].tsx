@@ -190,10 +190,7 @@ export default function TeamPage() {
 
     if (!summaries[player.name]) {
       try {
-        const res = await fetch(
-          `http://localhost:8080/api/v1/player/${encodeURIComponent(player.name)}/summary`,
-        );
-
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/player/${encodeURIComponent(player.name)}/summary`);
         const text = await res.text();
 
         setSummaries((prev) => ({ ...prev, [player.name]: text }));
@@ -221,7 +218,7 @@ export default function TeamPage() {
   useEffect(() => {
     if (backendTeamName) {
       fetch(
-        `http://localhost:8080/api/v1/player?team=${encodeURIComponent(backendTeamName)}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/player?team=${encodeURIComponent(backendTeamName)}`
       )
         .then((res) => res.json())
         .then((data) => {

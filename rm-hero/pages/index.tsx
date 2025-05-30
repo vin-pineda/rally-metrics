@@ -24,11 +24,6 @@ export default function IndexPage() {
     <DefaultLayout>
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <motion.div
-          animate={{ scale: [1, 1.1, 1] }}
-          className="absolute w-96 h-96 bg-yellow-400 opacity-10 rounded-full blur-3xl bottom-[-150px] right-[-150px]"
-          transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-        />
-        <motion.div
           animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
           className="absolute z-20"
           style={{ top: "20%", left: "10%" }}

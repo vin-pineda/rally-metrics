@@ -25,48 +25,45 @@ export default function SearchPage() {
   const [summaries, setSummaries] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    const query = new URLSearchParams();
+    const query = new URLSearchParams(); 
 
     if (name) query.append("name", (name as string).toLowerCase());
-    if (team) query.append("team", (team as string).toLowerCase());
-
-    fetch(`http://localhost:8080/api/v1/player?${query.toString()}`)
-      .then(async (res) => {
+    if (team) query.append("team", (team as string).toLowerCase())
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/player?${query.toString()}`)
+    .then(async (res) => {
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         const text = await res.text();
-
         return text ? JSON.parse(text) : [];
       })
       .then((data) => {
         setPlayers(data);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setLoading(false);
-      });
-  }, [name, team]);
+      })
+    }, [name, team]);
+    
+    const toggleSummary = async (player: Player) => {
+      const isExpanded = expandedPlayer === player.name; 
+      setExpandedPlayer(isExpanded ? null : player.name);
+      if (!summaries[player.name]) {
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/player/${encodeURIComponent(player.name)}/summary`
+          );
+          const text = await res.text(); 
 
-  const toggleSummary = async (player: Player) => {
-    const isExpanded = expandedPlayer === player.name;
-
-    setExpandedPlayer(isExpanded ? null : player.name);
-
-    if (!summaries[player.name]) {
-      try {
-        const res = await fetch(
-          `http://localhost:8080/api/v1/player/${encodeURIComponent(player.name)}/summary`
-        );
-        const text = await res.text();
-
-        setSummaries((prev) => ({ ...prev, [player.name]: text }));
-      } catch (err) {
-        setSummaries((prev) => ({
-          ...prev,
-          [player.name]: "Failed to load summary.",
-        }));
+          setSummaries((prev) => ({ ...prev, [player.name]: text }));
+        } catch (err) {
+          setSummaries((prev) => ({
+            ...prev,
+            [player.name]: "Failed to load summary.",
+          }));
+        }
       }
-    }
-  };
+    };
+
 
   return (
     <DefaultLayout>
