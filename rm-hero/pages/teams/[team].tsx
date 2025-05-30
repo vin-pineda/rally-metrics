@@ -5,7 +5,6 @@ import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 
 import DefaultLayout from "@/layouts/default";
 
-// Player type
 type Player = {
   name: string;
   rank: number;
@@ -18,7 +17,6 @@ type Player = {
   pts_won_percent: number;
 };
 
-// Maps for team names and logos
 const slugToBackendName: Record<string, string> = {
   "atlanta-bouncers": "Atlanta Bouncers",
   "brooklyn-pickleball-team": "Brooklyn Pickleball Team",

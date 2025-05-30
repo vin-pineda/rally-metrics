@@ -132,7 +132,6 @@ export default function IndexPage() {
         </motion.div>
       </section>
 
-      {/* Features Section */}
       <section className="py-20 px-6 md:px-10 relative z-10">
         <div className="grid gap-10 md:grid-cols-3">
           {[

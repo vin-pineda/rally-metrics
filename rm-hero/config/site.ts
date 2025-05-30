@@ -51,7 +51,6 @@ export const siteConfig = {
   ],
   links: {
     github: "https://github.com/vin-pineda",
-    twitter: "https://twitter.com/hero_ui",
     sponsor: "https://www.majorleaguepickleball.co/",
   },
 };

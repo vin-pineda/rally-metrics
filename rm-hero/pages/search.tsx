@@ -1,5 +1,3 @@
-// pages/search.tsx
-
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
