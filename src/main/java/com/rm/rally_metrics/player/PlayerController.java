@@ -20,10 +20,11 @@ public class PlayerController {
     @GetMapping
     public List<Player> getPlayers(
             @RequestParam(required = false) String team,
-            @RequestParam(required = false) String name) {
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String searchText) {
 
         if(team != null && name != null) {
-            return playerService.getPlayersByTeamAndName(team, name);
+            return playerService.getPlayersByNameOrTeam(searchText);
         }
         else if(team != null) {
             return playerService.getPlayersFromTeam(team);
@@ -34,6 +35,20 @@ public class PlayerController {
         else {
             return playerService.getPlayers();
         }
+    }
+
+    @GetMapping("/search")
+    public List<Player> getPlayersByNameOrTeam(@RequestParam("name") String name) {
+        System.out.println("Searching with name: " + name); // 🔍 Debug log
+        return playerService.getPlayersByNameOrTeam(name);
+    }
+
+
+    @GetMapping("/{playerName:.+}/summary")
+    public ResponseEntity<String> getPlayerSummary(@PathVariable("playerName") String playerName)
+    {
+        String summary = playerService.getSummaryForPlayer(playerName);
+        return ResponseEntity.ok(summary);
     }
 
     @PostMapping

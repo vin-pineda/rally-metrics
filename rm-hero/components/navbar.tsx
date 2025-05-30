@@ -9,43 +9,69 @@ import {
 } from "@heroui/navbar";
 
 import { Button } from "@heroui/button";
-import { Kbd } from "@heroui/kbd";
-import { Link } from "@heroui/link";
 import { Input } from "@heroui/input";
+import { Link } from "@heroui/link";
 import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
-import {
-  GithubIcon,
-  SearchIcon,
-} from "@/components/icons";
+import { GithubIcon, SearchIcon } from "@/components/icons";
 
 export const Navbar = () => {
-  const searchInput = (
+  const [searchText, setSearchText] = useState("");
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!searchText.trim()) return;
+    router.push(`/search?name=${encodeURIComponent(searchText.trim())}`);
+  };
+
+ const searchInput = (
+  <form
+    onSubmit={(e) => {
+      e.preventDefault();
+      if (searchText.trim()) {
+        router.push(`/search?name=${encodeURIComponent(searchText.trim())}`);
+      }
+    }}
+    className="w-full"
+  >
     <Input
       aria-label="Search"
+      value={searchText}
+      onChange={(e) => setSearchText(e.target.value)}
       classNames={{
         inputWrapper: "bg-default-100",
         input: "text-sm",
       }}
       labelPlacement="outside"
-      placeholder="Search..."
+      placeholder="Find Players"
       startContent={
         <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
       }
       type="search"
     />
-  );
+  </form>
+);
+
 
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
-          <img src="/rm/rm.png" alt= "Rally Metrics Logo" width = {36} height = {36} className = "object-contain"/>
+            <img
+              src="/rm/rm.png"
+              alt="Rally Metrics Logo"
+              width={36}
+              height={36}
+              className="object-contain"
+            />
             <p className="font-bold text-inherit">Rally Metrics</p>
           </NextLink>
         </NavbarBrand>
@@ -55,7 +81,7 @@ export const Navbar = () => {
               <NextLink
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
+                  "data-[active=true]:text-primary data-[active=true]:font-medium"
                 )}
                 color="foreground"
                 href={item.href}
@@ -67,27 +93,29 @@ export const Navbar = () => {
         </div>
       </NavbarContent>
 
-      <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
-        justify="end"
-      >
+      <NavbarContent className="flex basis-1/5 sm:basis-full" justify="end">
         <NavbarItem className="hidden sm:flex gap-2">
           <Link isExternal href={siteConfig.links.github} title="GitHub">
             <GithubIcon className="text-default-500" />
           </Link>
           <ThemeSwitch />
         </NavbarItem>
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
+        <NavbarItem className="flex w-60">{searchInput}</NavbarItem>
         <NavbarItem className="hidden md:flex">
           <Button
             isExternal
             as={Link}
             className="text-sm font-normal text-default-600 bg-default-100"
-            
             href={siteConfig.links.sponsor}
             variant="flat"
           >
-            <img src="/mlp/mlp.png" alt= "Major League Pickleball Logo" width = {36} height = {36} className = "object-contain"/>
+            <img
+              src="/mlp/mlp.png"
+              alt="Major League Pickleball Logo"
+              width={36}
+              height={36}
+              className="object-contain"
+            />
             Major League Pickleball
           </Button>
         </NavbarItem>
@@ -111,10 +139,10 @@ export const Navbar = () => {
                   index === 2
                     ? "primary"
                     : index === siteConfig.navMenuItems.length - 1
-                      ? "danger"
-                      : "foreground"
+                    ? "danger"
+                    : "foreground"
                 }
-                href="#"
+                href={item.href}
                 size="lg"
               >
                 {item.label}

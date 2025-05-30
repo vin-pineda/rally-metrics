@@ -1,11 +1,12 @@
 import { heroui } from "@heroui/theme";
 
-{import('tailwindcss').Config}
 const config = {
+  darkMode: "class",
   content: [
-    './layouts/**/*.{js,ts,jsx,tsx,mdx}',
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    "./layouts/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx}",
     "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
@@ -25,8 +26,10 @@ const config = {
       },
     },
   },
-  darkMode: "class",
-  plugins: [heroui()],
+  plugins: [
+    heroui(),
+    require("tailwind-scrollbar-hide"),
+  ],
 };
 
 export default config;

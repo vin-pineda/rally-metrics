@@ -10,4 +10,3 @@ public interface PlayerRepository extends JpaRepository<Player, String> {
     void deleteByName(String playerName);
     Optional<Player> findByName(String name);
 }
-

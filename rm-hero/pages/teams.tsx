@@ -35,7 +35,7 @@ export default function TeamsPage() {
                   className="absolute z-20"
                   animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
                   transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-                  style={{ top: "20%", left: "10%" }}
+                  style={{ top: "10%", left: "10%" }}
                 >
                   <Image
                     src="/rm/rm.png"

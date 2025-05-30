@@ -1,8 +1,10 @@
 package com.rm.rally_metrics.player;
 
+import com.rm.rally_metrics.gemini.GeminiService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,10 +12,12 @@ import java.util.stream.Collectors;
 @Component
 public class PlayerService {
     private final PlayerRepository playerRepository;
+    private final GeminiService geminiService;
 
     @Autowired
-    public PlayerService(PlayerRepository playerRepository) {
+    public PlayerService(PlayerRepository playerRepository, GeminiService geminiService) {
         this.playerRepository = playerRepository;
+        this.geminiService = geminiService;
     }
 
     public List<Player> getPlayers() {
@@ -22,7 +26,7 @@ public class PlayerService {
 
     public List<Player> getPlayersFromTeam(String teamName) {
         return playerRepository.findAll().stream()
-                .filter(player -> teamName.equals(player.getTeam()))
+                .filter(player -> player.getTeam() != null && player.getTeam().equalsIgnoreCase(teamName))
                 .collect(Collectors.toList());
     }
 
@@ -32,11 +36,16 @@ public class PlayerService {
                 .collect(Collectors.toList());
     }
 
-    public List<Player> getPlayersByTeamAndName(String team, String searchText) {
+    public List<Player> getPlayersByNameOrTeam(String searchText) {
+        String normalizedSearch = searchText.toLowerCase().trim();
         return playerRepository.findAll().stream()
-                .filter(player -> team.equals(player.getTeam()) && searchText.equals(player.getName()))
+                .filter(player ->
+                        player.getName().toLowerCase().contains(normalizedSearch) ||
+                                player.getTeam().toLowerCase().contains(normalizedSearch))
                 .collect(Collectors.toList());
     }
+
+
 
     public Player addPlayer(Player player) {
         playerRepository.save(player);
@@ -60,5 +69,23 @@ public class PlayerService {
     @Transactional
     public void deletePlayer(String playerName) {
         playerRepository.deleteByName(playerName);
+    }
+
+    public String getSummaryForPlayer(String playerName) {
+        Optional<Player> optionalPlayer = playerRepository.findAll().stream()
+                .filter(p -> p.getName().equalsIgnoreCase(playerName))
+                .findFirst();
+
+        if (optionalPlayer.isEmpty()) return "Player not found";
+
+        Player player = optionalPlayer.get();
+        String recentStats = String.format("Games won: %d, Games lost: %d, Points won: %d, Points lost: %d",
+                player.getGames_won(), player.getGames_lost(), player.getPts_won(), player.getPts_lost());
+        String styleHint = "Based on win/loss ratio and points";
+
+        return geminiService.generatePlayerSummary(
+
+                player.getName(), player.getTeam(), recentStats, styleHint
+        );
     }
 }
