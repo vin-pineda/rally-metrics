@@ -54,7 +54,6 @@ public class Player {
         this.pts_won_percent = pts_won_percent;
     }
 
-    // Getters and setters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
