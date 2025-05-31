@@ -1,11 +1,9 @@
 package com.rm.rally_metrics.player;
 
-
 import com.rm.rally_metrics.gemini.GeminiService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -47,8 +45,6 @@ public class PlayerService {
                 .collect(Collectors.toList());
     }
 
-
-
     public Player addPlayer(Player player) {
         playerRepository.save(player);
         return player;
@@ -56,14 +52,11 @@ public class PlayerService {
 
     public Player updatePlayer(Player updatedPlayer) {
         Optional<Player> existingPlayer = playerRepository.findByName(updatedPlayer.getName());
-
-        if(existingPlayer.isPresent()) {
+        if (existingPlayer.isPresent()) {
             Player playerToUpdate = existingPlayer.get();
             playerToUpdate.setName(updatedPlayer.getName());
             playerToUpdate.setTeam(updatedPlayer.getTeam());
-
-            playerRepository.save(playerToUpdate);
-            return playerToUpdate;
+            return playerRepository.save(playerToUpdate);
         }
         return null;
     }
@@ -82,7 +75,8 @@ public class PlayerService {
 
         Player player = optionalPlayer.get();
         String recentStats = String.format("Games won: %d, Games lost: %d, Points won: %d, Points lost: %d",
-                player.getGamesWon(), player.getGamesLost(), player.getPtsWon(), player.getPtsLost());
+                player.getGames_won(), player.getGames_lost(),
+                player.getPts_won(), player.getPts_lost());
 
         String styleHint = "Based on win/loss ratio and points";
 
@@ -90,5 +84,4 @@ public class PlayerService {
                 player.getName(), player.getTeam(), recentStats, styleHint
         );
     }
-
 }
