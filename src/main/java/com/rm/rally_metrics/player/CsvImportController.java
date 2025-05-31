@@ -22,11 +22,10 @@ public class CsvImportController {
 
             List<Player> players = new CsvToBeanBuilder<Player>(reader)
                     .withType(Player.class)
-                    .withIgnoreLeadingWhiteSpace(true)  // <- Add this
+                    .withIgnoreLeadingWhiteSpace(true)
                     .build()
                     .parse();
 
-            players.forEach(p -> System.out.println(p.getName() + " -> " + p.getGamesWon()));  // Debug line
             playerRepository.saveAll(players);
             return "Import successful!";
         } catch (Exception e) {
