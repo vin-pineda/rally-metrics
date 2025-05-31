@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.InputStreamReader;
-import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -18,12 +17,9 @@ public class CsvImportController {
     @PostMapping("/import")
     public String importCsv() {
         try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("mlp_stats.csv");
-            if (inputStream == null) {
-                return "CSV file not found in resources!";
-            }
-
-            InputStreamReader reader = new InputStreamReader(inputStream);
+            InputStreamReader reader = new InputStreamReader(
+                    getClass().getClassLoader().getResourceAsStream("mlp_stats.csv")
+            );
 
             List<Player> players = new CsvToBeanBuilder<Player>(reader)
                     .withType(Player.class)
