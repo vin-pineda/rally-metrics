@@ -351,12 +351,12 @@ export default function TeamPage() {
                           <td className="px-6 py-4">{player.games_won}</td>
                           <td className="px-6 py-4">{player.games_lost}</td>
                           <td className="px-6 py-4">
-                            {player.games_won_percent.toFixed(1)}%
+                            {player.games_won_percent != null ? player.games_won_percent.toFixed(1) + '%' : 'N/A'}
                           </td>
                           <td className="px-6 py-4">{player.pts_won}</td>
                           <td className="px-6 py-4">{player.pts_lost}</td>
                           <td className="px-6 py-4">
-                            {player.pts_won_percent.toFixed(1)}%
+                            {player.pts_won_percent != null ? player.pts_won_percent.toFixed(1) + '%' : 'N/A'}
                           </td>
                         </tr>
                         {expandedPlayer === player.name && (

@@ -25,42 +25,42 @@ public class Player {
 
     @CsvBindByName(column = "Games Won")
     @Column(name = "games_won")
-    private Integer games_won;
+    private Integer gamesWon;
 
     @CsvBindByName(column = "Games Lost")
     @Column(name = "games_lost")
-    private Integer games_lost;
+    private Integer gamesLost;
 
     @CsvBindByName(column = "Games Won Percent")
     @Column(name = "games_won_percent")
-    private Double games_won_percent;
+    private Double gamesWonPercent;
 
     @CsvBindByName(column = "Pts Won")
     @Column(name = "pts_won")
-    private Integer pts_won;
+    private Integer ptsWon;
 
     @CsvBindByName(column = "Pts Lost")
     @Column(name = "pts_lost")
-    private Integer pts_lost;
+    private Integer ptsLost;
 
     @CsvBindByName(column = "Pts Won Percent")
     @Column(name = "pts_won_percent")
-    private Double pts_won_percent;
+    private Double ptsWonPercent;
 
     public Player() {}
 
     public Player(String name, Integer rank, String team,
-                  Integer games_won, Integer games_lost, Double games_won_percent,
-                  Integer pts_won, Integer pts_lost, Double pts_won_percent) {
+                  Integer gamesWon, Integer gamesLost, Double gamesWonPercent,
+                  Integer ptsWon, Integer ptsLost, Double ptsWonPercent) {
         this.name = name;
         this.rank = rank;
         this.team = team;
-        this.games_won = games_won;
-        this.games_lost = games_lost;
-        this.games_won_percent = games_won_percent;
-        this.pts_won = pts_won;
-        this.pts_lost = pts_lost;
-        this.pts_won_percent = pts_won_percent;
+        this.gamesWon = gamesWon;
+        this.gamesLost = gamesLost;
+        this.gamesWonPercent = gamesWonPercent;
+        this.ptsWon = ptsWon;
+        this.ptsLost = ptsLost;
+        this.ptsWonPercent = ptsWonPercent;
     }
 
     public String getName() { return name; }
@@ -72,21 +72,21 @@ public class Player {
     public String getTeam() { return team; }
     public void setTeam(String team) { this.team = team; }
 
-    public Integer getGames_won() { return games_won; }
-    public void setGames_won(Integer games_won) { this.games_won = games_won; }
+    public Integer getGamesWon() { return gamesWon; }
+    public void setGamesWon(Integer gamesWon) { this.gamesWon = gamesWon; }
 
-    public Integer getGames_lost() { return games_lost; }
-    public void setGames_lost(Integer games_lost) { this.games_lost = games_lost; }
+    public Integer getGamesLost() { return gamesLost; }
+    public void setGamesLost(Integer gamesLost) { this.gamesLost = gamesLost; }
 
-    public Double getGames_won_percent() { return games_won_percent; }
-    public void setGames_won_percent(Double games_won_percent) { this.games_won_percent = games_won_percent; }
+    public Double getGamesWonPercent() { return gamesWonPercent; }
+    public void setGamesWonPercent(Double gamesWonPercent) { this.gamesWonPercent = gamesWonPercent; }
 
-    public Integer getPts_won() { return pts_won; }
-    public void setPts_won(Integer pts_won) { this.pts_won = pts_won; }
+    public Integer getPtsWon() { return ptsWon; }
+    public void setPtsWon(Integer ptsWon) { this.ptsWon = ptsWon; }
 
-    public Integer getPts_lost() { return pts_lost; }
-    public void setPts_lost(Integer pts_lost) { this.pts_lost = pts_lost; }
+    public Integer getPtsLost() { return ptsLost; }
+    public void setPtsLost(Integer ptsLost) { this.ptsLost = ptsLost; }
 
-    public Double getPts_won_percent() { return pts_won_percent; }
-    public void setPts_won_percent(Double pts_won_percent) { this.pts_won_percent = pts_won_percent; }
+    public Double getPtsWonPercent() { return ptsWonPercent; }
+    public void setPtsWonPercent(Double ptsWonPercent) { this.ptsWonPercent = ptsWonPercent; }
 }

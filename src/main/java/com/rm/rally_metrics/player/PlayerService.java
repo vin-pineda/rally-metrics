@@ -75,8 +75,7 @@ public class PlayerService {
 
         Player player = optionalPlayer.get();
         String recentStats = String.format("Games won: %d, Games lost: %d, Points won: %d, Points lost: %d",
-                player.getGames_won(), player.getGames_lost(), player.getPts_won(), player.getPts_lost());
-
+                player.getGamesWon(), player.getGamesLost(), player.getPtsWon(), player.getPtsLost());
 
         String styleHint = "Based on win/loss ratio and points";
 
