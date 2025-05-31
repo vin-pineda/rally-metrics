@@ -212,11 +212,7 @@ export default function TeamPage() {
 
     window.addEventListener("mousemove", updateMouse);
 
-    return () => window.removeEventListener("mousemove", updateMouse);
-  }, [mouseX, mouseY]);
-
-  useEffect(() => {
-    if (backendTeamName) {
+    if (router.isReady && backendTeamName) {
       fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/player?team=${encodeURIComponent(backendTeamName)}`
       )
@@ -230,7 +226,9 @@ export default function TeamPage() {
           setLoading(false);
         });
     }
-  }, [backendTeamName]);
+
+    return () => window.removeEventListener("mousemove", updateMouse);
+  }, [router.isReady, backendTeamName, mouseX, mouseY]);
 
   return (
     <DefaultLayout>
