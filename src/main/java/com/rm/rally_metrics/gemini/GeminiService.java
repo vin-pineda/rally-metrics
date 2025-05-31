@@ -15,7 +15,8 @@ public class GeminiService {
     @Value("${gemini.api.key}")
     private String apiKey;
 
-    private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+    private static final String GEMINI_URL =
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
     public String generatePlayerSummary(String name, String team, String recentStats, String styleHint) {
         String prompt = String.format("""
@@ -57,10 +58,11 @@ public class GeminiService {
 
         } catch (HttpClientErrorException e) {
             System.err.println("Gemini API error:");
-            System.err.println("Status: " + e.getStatusCode());
-            System.err.println("Body: " + e.getResponseBodyAsString());
-            return "Error: Gemini API call failed.";
-        } catch (Exception e) {
+            System.err.println("Status Code: " + e.getStatusCode());
+            System.err.println("Response Body: " + e.getResponseBodyAsString());
+            return "Error: Gemini API call failed.\nDetails: " + e.getResponseBodyAsString();
+        }
+        catch (Exception e) {
             System.err.println("Unexpected error:");
             e.printStackTrace();
             return "Error: Unable to generate summary.";
