@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
+import { motion } from "framer-motion";
 
 import DefaultLayout from "@/layouts/default";
 
@@ -9,12 +9,12 @@ type Player = {
   name: string;
   rank: number;
   team: string;
-  games_won: number;
-  games_lost: number;
-  games_won_percent: number;
-  pts_won: number;
-  pts_lost: number;
-  pts_won_percent: number;
+  gamesWon: number;
+  gamesLost: number;
+  gamesWonPercent: number;
+  ptsWon: number;
+  ptsLost: number;
+  ptsWonPercent: number;
 };
 
 const slugToBackendName: Record<string, string> = {
@@ -40,7 +40,7 @@ const slugToLogoFilename: Record<string, string> = Object.fromEntries(
   Object.entries(slugToBackendName).map(([slug]) => [
     slug,
     slug.replace(/-/g, "_") + ".png",
-  ]),
+  ])
 );
 
 const teamColors: Record<
@@ -157,7 +157,6 @@ export default function TeamPage() {
 
   const slug = team?.toString() || "";
   const backendTeamName = slugToBackendName[slug] || "";
-  console.log("Team slug:", slug, "→ Backend name:", backendTeamName);
   const logoFilename = slugToLogoFilename[slug] || "";
   const teamStyle = teamColors[slug] || {
     text: "text-orange-500",
@@ -166,77 +165,53 @@ export default function TeamPage() {
     glow: "bg-orange-500",
   };
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const x = useSpring(
-    useTransform(mouseX, (v) => v - 100),
-    { stiffness: 50 },
-  );
-  const y = useSpring(
-    useTransform(mouseY, (v) => v - 100),
-    { stiffness: 50 },
-  );
-
   const currentIndex = teamSlugsOrdered.indexOf(slug);
   const goToTeam = (index: number) => {
     const nextSlug = teamSlugsOrdered[index];
-
     if (nextSlug) router.push(`/teams/${nextSlug}`);
   };
 
   const handleTogglePlayer = async (player: Player) => {
     const isExpanded = expandedPlayer === player.name;
-
     setExpandedPlayer(isExpanded ? null : player.name);
 
     if (!summaries[player.name]) {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/player/${encodeURIComponent(player.name)}/summary`);
         const text = await res.text();
-
         setSummaries((prev) => ({ ...prev, [player.name]: text }));
       } catch (err) {
         console.error("Failed to fetch summary:", err);
-        setSummaries((prev) => ({
-          ...prev,
-          [player.name]: "Error loading summary.",
-        }));
+        setSummaries((prev) => ({ ...prev, [player.name]: "Error loading summary." }));
       }
     }
   };
 
   useEffect(() => {
-    const updateMouse = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-
-    window.addEventListener("mousemove", updateMouse);
-
     if (router.isReady && backendTeamName) {
-      fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/player?team=${encodeURIComponent(backendTeamName)}`
-      )
+      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/player?team=${encodeURIComponent(backendTeamName)}`)
         .then((res) => res.json())
         .then((data) => {
-          const formatted = data.map((p: any) => ({
+          const formatted = data.map((p: any): Player => ({
             name: p.name,
             rank: p.rank,
             team: p.team,
-            games_won: p.games_won,
-            games_lost: p.games_lost,
-            games_won_percent: p.games_won_percent,
-            pts_won: p.pts_won,
-            pts_lost: p.pts_lost,
-            pts_won_percent: p.pts_won_percent,
+            gamesWon: p.games_won,
+            gamesLost: p.games_lost,
+            gamesWonPercent: p.games_won_percent,
+            ptsWon: p.pts_won,
+            ptsLost: p.pts_lost,
+            ptsWonPercent: p.pts_won_percent,
           }));
           setPlayers(formatted);
           setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch players:", err);
+          setLoading(false);
         });
-      }
-
-    return () => window.removeEventListener("mousemove", updateMouse);
-  }, [router.isReady, backendTeamName, mouseX, mouseY]);
+    }
+  }, [router.isReady, backendTeamName]);
 
   return (
     <DefaultLayout>
@@ -354,15 +329,15 @@ export default function TeamPage() {
                             {expandedPlayer === player.name ? "▼" : "▶"}
                           </td>
                           <td className="px-6 py-4">{player.rank}</td>
-                          <td className="px-6 py-4">{player.games_won}</td>
-                          <td className="px-6 py-4">{player.games_lost}</td>
+                          <td className="px-6 py-4">{player.gamesWon}</td>
+                          <td className="px-6 py-4">{player.gamesLost}</td>
                           <td className="px-6 py-4">
-                            {player.games_won_percent != null ? player.games_won_percent.toFixed(1) + '%' : 'N/A'}
+                            {player.gamesWonPercent != null ? player.gamesWonPercent.toFixed(1) + '%' : 'N/A'}
                           </td>
-                          <td className="px-6 py-4">{player.pts_won}</td>
-                          <td className="px-6 py-4">{player.pts_lost}</td>
+                          <td className="px-6 py-4">{player.ptsWon}</td>
+                          <td className="px-6 py-4">{player.ptsLost}</td>
                           <td className="px-6 py-4">
-                            {player.pts_won_percent != null ? player.pts_won_percent.toFixed(1) + '%' : 'N/A'}
+                            {player.ptsWonPercent != null ? player.ptsWonPercent.toFixed(1) + '%' : 'N/A'}
                           </td>
                         </tr>
                         {expandedPlayer === player.name && (
