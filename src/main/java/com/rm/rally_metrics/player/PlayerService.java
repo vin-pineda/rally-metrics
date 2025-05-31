@@ -1,9 +1,11 @@
 package com.rm.rally_metrics.player;
 
+
 import com.rm.rally_metrics.gemini.GeminiService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -80,12 +82,13 @@ public class PlayerService {
 
         Player player = optionalPlayer.get();
         String recentStats = String.format("Games won: %d, Games lost: %d, Points won: %d, Points lost: %d",
-                player.getGames_won(), player.getGames_lost(), player.getPts_won(), player.getPts_lost());
+                player.getGamesWon(), player.getGamesLost(), player.getPtsWon(), player.getPtsLost());
+
         String styleHint = "Based on win/loss ratio and points";
 
         return geminiService.generatePlayerSummary(
-
                 player.getName(), player.getTeam(), recentStats, styleHint
         );
     }
+
 }
