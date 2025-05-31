@@ -11,37 +11,38 @@ import jakarta.persistence.Table;
 public class Player {
 
     @Id
-    @CsvBindByName
+    @CsvBindByName(column = "Name")
     @Column(name = "name", unique = true)
     private String name;
 
-    @CsvBindByName
+    @CsvBindByName(column = "Rank")
     private Integer rank;
 
-    @CsvBindByName
+    @CsvBindByName(column = "Team")
     private String team;
 
-    @CsvBindByName
+    @CsvBindByName(column = "Games Won")
     private Integer games_won;
 
-    @CsvBindByName
+    @CsvBindByName(column = "Games Lost")
     private Integer games_lost;
 
-    @CsvBindByName
+    @CsvBindByName(column = "Games Won Percent")
     private Double games_won_percent;
 
-    @CsvBindByName
+    @CsvBindByName(column = "Pts Won")
     private Integer pts_won;
 
-    @CsvBindByName
+    @CsvBindByName(column = "Pts Lost")
     private Integer pts_lost;
 
-    @CsvBindByName
+    @CsvBindByName(column = "Pts Won Percent")
     private Double pts_won_percent;
 
     public Player() {}
 
-    public Player(String name, Integer rank, String team, Integer games_won, Integer games_lost, Double games_won_percent, Integer pts_won, Integer pts_lost, Double pts_won_percent) {
+    public Player(String name, Integer rank, String team, Integer games_won, Integer games_lost,
+                  Double games_won_percent, Integer pts_won, Integer pts_lost, Double pts_won_percent) {
         this.name = name;
         this.rank = rank;
         this.team = team;
@@ -53,11 +54,7 @@ public class Player {
         this.pts_won_percent = pts_won_percent;
     }
 
-    public Player(String name) {
-        this.name = name;
-    }
-
-    // Getters and setters...
+    // Getters and setters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
