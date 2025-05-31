@@ -196,12 +196,12 @@ export default function TeamPage() {
             name: p.name,
             rank: p.rank,
             team: p.team,
-            gamesWon: p.games_won,
-            gamesLost: p.games_lost,
-            gamesWonPercent: p.games_won_percent,
-            ptsWon: p.pts_won,
-            ptsLost: p.pts_lost,
-            ptsWonPercent: p.pts_won_percent,
+            games_won: p.games_won,
+            games_lost: p.games_lost,
+            games_won_percent: p.games_won_percent,
+            pts_won: p.pts_won,
+            pts_lost: p.pts_lost,
+            pts_won_percent: p.pts_won_percent,
           }));
           setPlayers(formatted);
           setLoading(false);
