@@ -219,14 +219,21 @@ export default function TeamPage() {
       )
         .then((res) => res.json())
         .then((data) => {
-          setPlayers(data);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error("Failed to fetch players:", err);
+          const formatted = data.map((p: any) => ({
+            name: p.name,
+            rank: p.rank,
+            team: p.team,
+            games_won: p.games_won,
+            games_lost: p.games_lost,
+            games_won_percent: p.games_won_percent,
+            pts_won: p.pts_won,
+            pts_lost: p.pts_lost,
+            pts_won_percent: p.pts_won_percent,
+          }));
+          setPlayers(formatted);
           setLoading(false);
         });
-    }
+      }
 
     return () => window.removeEventListener("mousemove", updateMouse);
   }, [router.isReady, backendTeamName, mouseX, mouseY]);
