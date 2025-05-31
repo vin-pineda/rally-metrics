@@ -5,16 +5,33 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.InputStream;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/player")
 public class PlayerController {
     private final PlayerService playerService;
+    private final PlayerCsvService playerCsvService;
 
     @Autowired
-    public PlayerController(PlayerService playerService) {
+    public PlayerController(PlayerService playerService, PlayerCsvService playerCsvService) {
         this.playerService = playerService;
+        this.playerCsvService = playerCsvService;
+    }
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadCsv() {
+        try (InputStream input = getClass().getResourceAsStream("/mlp_stats.csv")) {
+            if (input == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("CSV file not found in resources.");
+            }
+
+            playerCsvService.importCsv(input);
+            return ResponseEntity.ok("CSV import successful.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to import CSV: " + e.getMessage());
+        }
     }
 
     @GetMapping
