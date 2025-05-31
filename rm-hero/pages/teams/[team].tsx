@@ -157,6 +157,7 @@ export default function TeamPage() {
 
   const slug = team?.toString() || "";
   const backendTeamName = slugToBackendName[slug] || "";
+  console.log("Team slug:", slug, "→ Backend name:", backendTeamName);
   const logoFilename = slugToLogoFilename[slug] || "";
   const teamStyle = teamColors[slug] || {
     text: "text-orange-500",
