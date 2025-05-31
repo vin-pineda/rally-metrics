@@ -316,16 +316,10 @@ export default function TeamPage() {
                           key={player.name}
                           className="even:bg-gray-50 dark:even:bg-neutral-700/50 transition-all hover:scale-[1.01] hover:bg-gray-100 dark:hover:bg-neutral-700"
                         >
-                          <td
-                            className="px-6 py-4 font-semibold cursor-pointer"
-                            onClick={() => handleTogglePlayer(player)}
-                          >
+                          <td className="px-6 py-4 font-semibold cursor-pointer" onClick={() => handleTogglePlayer(player)}>
                             {player.name}
                           </td>
-                          <td
-                            className="w-6 text-center cursor-pointer"
-                            onClick={() => handleTogglePlayer(player)}
-                          >
+                          <td className="w-6 text-center cursor-pointer" onClick={() => handleTogglePlayer(player)}>
                             {expandedPlayer === player.name ? "▼" : "▶"}
                           </td>
                           <td className="px-6 py-4">{player.rank}</td>
@@ -340,6 +334,7 @@ export default function TeamPage() {
                             {player.ptsWonPercent != null ? player.ptsWonPercent.toFixed(1) + '%' : 'N/A'}
                           </td>
                         </tr>
+                                            
                         {expandedPlayer === player.name && (
                           <tr>
                             <td
