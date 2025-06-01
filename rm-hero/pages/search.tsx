@@ -27,8 +27,8 @@ export default function SearchPage() {
   useEffect(() => {
     const query = new URLSearchParams(); 
 
-    if (name) query.append("name", (name as string).toLowerCase());
-    if (team) query.append("team", (team as string).toLowerCase())
+    if (name) query.append("team", team as string);
+    if (team) query.append("name", name as string);
     fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/player?${query.toString()}`)
     .then(async (res) => {
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
@@ -36,20 +36,20 @@ export default function SearchPage() {
         return text ? JSON.parse(text) : [];
       })
       .then((data) => {
-  const formatted = data.map((p: any): Player => ({
-    name: p.name,
-    rank: p.rank,
-    team: p.team,
-    gamesWon: p.games_won,
-    gamesLost: p.games_lost,
-    gamesWonPercent: p.games_won_percent,
-    ptsWon: p.pts_won,
-    ptsLost: p.pts_lost,
-    ptsWonPercent: p.pts_won_percent,
-  }));
-  setPlayers(formatted);
-  setLoading(false);
-})
+        const formatted = data.map((p: any): Player => ({
+          name: p.name,
+          rank: p.rank,
+          team: p.team,
+          gamesWon: p.games_won,
+          gamesLost: p.games_lost,
+          gamesWonPercent: p.games_won_percent,
+          ptsWon: p.pts_won,
+          ptsLost: p.pts_lost,
+          ptsWonPercent: p.pts_won_percent,
+        }));
+        setPlayers(formatted);
+        setLoading(false);
+      })
 
       .catch(() => {
         setLoading(false);
