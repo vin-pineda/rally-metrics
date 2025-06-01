@@ -17,7 +17,7 @@ public class CorsConfig {
                                 "http://localhost:3000",
                                 "https://rally-metrics.vercel.app",
                                 "https://rallymetrics.com",
-                                "https://rally-metrics-qgm0tdwxp-vincent-pinedas-projects.vercel.app"
+                                "https://rally-metrics-cpxojhk7b-vincent-pinedas-projects.vercel.app"
                         )
                         .allowedMethods("*");
             }
