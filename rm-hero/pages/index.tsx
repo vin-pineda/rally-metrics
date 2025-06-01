@@ -22,95 +22,96 @@ export default function IndexPage() {
 
   return (
     <DefaultLayout>
+      {/* Floating Icons */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <motion.div
           animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
-          className="absolute z-20"
-          style={{ top: "20%", left: "10%" }}
+          className="absolute z-10"
+          style={{ top: "5%", left: "5%" }}
           transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
         >
           <Image
-            alt="Animated Pickleball Left"
+            alt="Animated Pickleball"
             className="object-contain"
-            height={125}
+            height={90}
+            width={90}
             src="/rm/pickleball.png"
-            width={125}
           />
         </motion.div>
 
         <motion.div
-          animate={{ y: [0, -30, 0], x: [0, -10, 0] }}
-          className="absolute z-20"
-          style={{ top: "20%", right: "5%" }}
-          transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+          animate={{ y: [0, -20, 0], x: [0, -10, 0] }}
+          className="absolute z-10"
+          style={{ top: "10%", right: "5%" }}
+          transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
         >
           <Image
-            alt="Animated Racket Bottom Left"
+            alt="Animated Racket"
             className="object-contain"
-            height={240}
+            height={100}
+            width={100}
             src="/rm/racket.png"
-            width={240}
           />
         </motion.div>
 
         <motion.div
           animate={{ y: [0, 20, 0], x: [0, 10, 0] }}
-          className="absolute z-20"
+          className="absolute z-10"
           style={{ bottom: "10%", left: "5%" }}
-          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+          transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
         >
           <Image
-            alt="Animated Racket Top Right"
+            alt="Animated Racket"
             className="object-contain"
-            height={220}
+            height={100}
+            width={100}
             src="/rm/racket.png"
-            width={220}
           />
         </motion.div>
 
         <motion.div
           animate={{ y: [0, 20, 0], x: [0, -10, 0] }}
-          className="absolute z-20"
-          style={{ bottom: "15%", right: "7.5%" }}
-          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+          className="absolute z-10"
+          style={{ bottom: "10%", right: "5%" }}
+          transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
         >
           <Image
-            alt="Animated Pickleball Bottom Right"
+            alt="Animated Pickleball"
             className="object-contain"
-            height={100}
+            height={80}
+            width={80}
             src="/rm/pickleball.png"
-            width={125}
           />
         </motion.div>
       </div>
 
-      <section className="relative z-10 py-6 px-6 md:px-10 flex flex-col md:flex-row items-center text-center md:text-left gap-10">
+      {/* Hero Section */}
+      <section className="relative z-10 py-10 px-6 md:py-16 md:px-10 flex flex-col md:flex-row items-center text-center md:text-left gap-12 md:gap-16">
         <motion.div
           animate={{ opacity: 1, y: 0 }}
-          className="flex-shrink-0"
+          className="w-full md:w-1/2 flex justify-center"
           initial={{ opacity: 0, y: -5 }}
           transition={{ duration: 0.6 }}
         >
           <Image
             alt="Rally Metrics Logo"
             className="object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500"
-            height={300}
+            height={280}
+            width={280}
             src="/rm/rm.png"
-            width={500}
           />
         </motion.div>
 
         <motion.div
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-xl flex flex-col items-center md:items-start gap-4"
+          className="w-full md:w-1/2 flex flex-col items-center md:items-start gap-4"
           initial={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <h1 className={`${title()} tracking-tight`}>
+          <h1 className={`${title()} tracking-tight leading-tight`}>
             The <span className={title({ color: "yellow" })}>smartest</span> way
-            to draft your{" "}
-            <span className={title({ color: "yellow" })}>MLP</span> fantasy team
-            starts here.
+            to draft your <span className={title({ color: "yellow" })}>MLP</span>{" "}
+            fantasy team starts here.
           </h1>
           <p className={subtitle()}>
             Built for the stats-driven pickleball fan
@@ -127,6 +128,7 @@ export default function IndexPage() {
         </motion.div>
       </section>
 
+      {/* Features Section */}
       <section className="py-20 px-6 md:px-10 relative z-10">
         <div className="grid gap-10 md:grid-cols-3">
           {[
