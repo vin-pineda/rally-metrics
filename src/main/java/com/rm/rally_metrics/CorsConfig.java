@@ -16,12 +16,11 @@ public class CorsConfig {
                         .allowedOrigins(
                                 "http://localhost:3000",
                                 "https://rally-metrics.vercel.app",
-                                "rallymetrics.com",
-                                "www.rallymetrics.com",
-                                "https://rallymetrics.com",
-                                "https://rally-metrics-89ctsmsi5-vincent-pinedas-projects.vercel.app"
+                                "https://www.rallymetrics.com",
+                                "https://rallymetrics.com"
                         )
-                        .allowedMethods("*");
+                        .allowedMethods("*")
+                        .allowedHeaders("*");
             }
         };
     }
