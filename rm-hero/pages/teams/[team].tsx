@@ -324,16 +324,18 @@ export default function TeamPage() {
                           <td className="w-6 text-center cursor-pointer" onClick={() => handleTogglePlayer(player)}>
                             {expandedPlayer === player.name ? "▼" : "▶"}
                           </td>
-                          <td className="px-6 py-4">{player.gamesWon}</td>
-                          <td className="px-6 py-4">{player.gamesLost}</td>
-                          <td className="px-6 py-4">
-                            {player.gamesWonPercent != null ? player.gamesWonPercent.toFixed(1) + '%' : 'N/A'}
-                          </td>
-                          <td className="px-6 py-4">{player.ptsWon}</td>
-                          <td className="px-6 py-4">{player.ptsLost}</td>
-                          <td className="px-6 py-4">
-                            {player.ptsWonPercent != null ? player.ptsWonPercent.toFixed(1) + '%' : 'N/A'}
-                          </td>
+                          <td className="px-6 py-4">{player.rank}</td>
+                            <td className="px-6 py-4">{player.gamesWon}</td>
+                            <td className="px-6 py-4">{player.gamesLost}</td>
+                            <td className="px-6 py-4">
+                              {player.gamesWonPercent != null ? player.gamesWonPercent.toFixed(1) + '%' : 'N/A'}
+                            </td>
+                            <td className="px-6 py-4">{player.ptsWon}</td>
+                            <td className="px-6 py-4">{player.ptsLost}</td>
+                            <td className="px-6 py-4">
+                              {player.ptsWonPercent != null ? player.ptsWonPercent.toFixed(1) + '%' : 'N/A'}
+                            </td>
+
                                               
                         </tr>
                                             
