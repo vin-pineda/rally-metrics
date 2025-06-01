@@ -9,12 +9,12 @@ type Player = {
   name: string;
   rank: number;
   team: string;
-  games_won: number;
-  games_lost: number;
-  games_won_percent: number;
-  pts_won: number;
-  pts_lost: number;
-  pts_won_percent: number;
+  gamesWon: number;
+  gamesLost: number;
+  gamesWonPercent: number;
+  ptsWon: number;
+  ptsLost: number;
+  ptsWonPercent: number;
 };
 
 const slugToBackendName: Record<string, string> = {
@@ -42,6 +42,7 @@ const slugToLogoFilename: Record<string, string> = Object.fromEntries(
     slug.replace(/-/g, "_") + ".png",
   ])
 );
+
 
 const teamColors: Record<
   string,
@@ -196,12 +197,12 @@ export default function TeamPage() {
             name: p.name,
             rank: p.rank,
             team: p.team,
-            games_won: p.games_won,
-            games_lost: p.games_lost,
-            games_won_percent: p.games_won_percent,
-            pts_won: p.pts_won,
-            pts_lost: p.pts_lost,
-            pts_won_percent: p.pts_won_percent,
+            gamesWon: p.games_won,
+            gamesLost: p.games_lost,
+            gamesWonPercent: p.games_won_percent,
+            ptsWon: p.pts_won,
+            ptsLost: p.pts_lost,
+            ptsWonPercent: p.pts_won_percent,
           }));
           setPlayers(formatted);
           setLoading(false);
@@ -212,6 +213,7 @@ export default function TeamPage() {
         });
     }
   }, [router.isReady, backendTeamName]);
+
 
   return (
     <DefaultLayout>
@@ -322,15 +324,15 @@ export default function TeamPage() {
                           <td className="w-6 text-center cursor-pointer" onClick={() => handleTogglePlayer(player)}>
                             {expandedPlayer === player.name ? "▼" : "▶"}
                           </td>
-                          <td className="px-6 py-4">{player.games_won}</td>
-                          <td className="px-6 py-4">{player.games_lost}</td>
+                          <td className="px-6 py-4">{player.gamesWon}</td>
+                          <td className="px-6 py-4">{player.gamesLost}</td>
                           <td className="px-6 py-4">
-                            {player.games_won_percent != null ? player.games_won_percent.toFixed(1) + '%' : 'N/A'}
+                            {player.gamesWonPercent != null ? player.gamesWonPercent.toFixed(1) + '%' : 'N/A'}
                           </td>
-                          <td className="px-6 py-4">{player.pts_won}</td>
-                          <td className="px-6 py-4">{player.pts_lost}</td>
+                          <td className="px-6 py-4">{player.ptsWon}</td>
+                          <td className="px-6 py-4">{player.ptsLost}</td>
                           <td className="px-6 py-4">
-                            {player.pts_won_percent != null ? player.pts_won_percent.toFixed(1) + '%' : 'N/A'}
+                            {player.ptsWonPercent != null ? player.ptsWonPercent.toFixed(1) + '%' : 'N/A'}
                           </td>
                                               
                         </tr>
