@@ -16,7 +16,8 @@ public class CorsConfig {
                         .allowedOrigins(
                                 "http://localhost:3000",
                                 "https://rally-metrics.vercel.app",
-                                "https://rally-metrics-qgm0tdwxp-vincent-pinedas-projects.vercel.app" // ← add this!
+                                "https://rallymetrics.com",
+                                "https://rally-metrics-qgm0tdwxp-vincent-pinedas-projects.vercel.app"
                         )
                         .allowedMethods("*");
             }

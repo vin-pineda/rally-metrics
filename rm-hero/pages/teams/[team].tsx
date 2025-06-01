@@ -295,20 +295,20 @@ export default function TeamPage() {
               </p>
             ) : (
               <div className="overflow-x-auto scrollbar-hide rounded-xl shadow-lg border dark:border-neutral-800">
-                <table className="w-full text-md bg-white dark:bg-neutral-800 text-gray-800 dark:text-white">
+                <table className="w-full text-md bg-white dark:bg-neutral-800 text-gray-800 dark:text-white table-fixed border-collapse">
                   <thead
                     className={`sticky top-0 z-20 shadow-md ${teamStyle.thead} dark:text-white dark:bg-neutral-700`}
                   >
                     <tr>
-                      <th className="px-6 py-4">Player</th>
-                      <th className="w-6" />
-                      <th className="px-6 py-4">Rank</th>
-                      <th className="px-6 py-4">W</th>
-                      <th className="px-6 py-4">L</th>
-                      <th className="px-6 py-4">Win %</th>
-                      <th className="px-6 py-4">Pts Won</th>
-                      <th className="px-6 py-4">Pts Lost</th>
-                      <th className="px-6 py-4">Pts %</th>
+                      <th className="px-6 py-4 border-none">Player</th>
+                      <th className="w-6 border-none" />
+                      <th className="px-6 py-4 border-none">Rank</th>
+                      <th className="px-6 py-4 border-none">W</th>
+                      <th className="px-6 py-4 border-none">L</th>
+                      <th className="px-6 py-4 border-none">Win %</th>
+                      <th className="px-6 py-4 border-none">Pts Won</th>
+                      <th className="px-6 py-4 border-none">Pts Lost</th>
+                      <th className="px-6 py-4 border-none">Pts %</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -318,21 +318,21 @@ export default function TeamPage() {
                           key={player.name}
                           className="even:bg-gray-50 dark:even:bg-neutral-700/50 transition-all hover:scale-[1.01] hover:bg-gray-100 dark:hover:bg-neutral-700"
                         >
-                          <td className="px-6 py-4 font-semibold cursor-pointer" onClick={() => handleTogglePlayer(player)}>
+                          <td className="px-6 py-4 border-none font-semibold cursor-pointer " onClick={() => handleTogglePlayer(player)}>
                             {player.name}
                           </td>
-                          <td className="w-6 text-center cursor-pointer" onClick={() => handleTogglePlayer(player)}>
+                          <td className="w-6 border-none text-center cursor-pointer" onClick={() => handleTogglePlayer(player)}>
                             {expandedPlayer === player.name ? "▼" : "▶"}
                           </td>
-                          <td className="px-6 py-4">{player.rank}</td>
-                            <td className="px-6 py-4">{player.gamesWon}</td>
-                            <td className="px-6 py-4">{player.gamesLost}</td>
-                            <td className="px-6 py-4">
+                          <td className="px-6 py-4 border-none">{player.rank}</td>
+                            <td className="px-6 py-4 border-none">{player.gamesWon}</td>
+                            <td className="px-6 py-4 border-none">{player.gamesLost}</td>
+                            <td className="px-6 py-4 border-none">
                               {player.gamesWonPercent != null ? player.gamesWonPercent.toFixed(1) + '%' : 'N/A'}
                             </td>
-                            <td className="px-6 py-4">{player.ptsWon}</td>
-                            <td className="px-6 py-4">{player.ptsLost}</td>
-                            <td className="px-6 py-4">
+                            <td className="px-6 py-4 border-none">{player.ptsWon}</td>
+                            <td className="px-6 py-4 border-none">{player.ptsLost}</td>
+                            <td className="px-6 py-4 border-none">
                               {player.ptsWonPercent != null ? player.ptsWonPercent.toFixed(1) + '%' : 'N/A'}
                             </td>
 
