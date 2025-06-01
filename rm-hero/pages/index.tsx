@@ -27,14 +27,14 @@ export default function IndexPage() {
         <motion.div
           animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
           className="absolute z-10"
-          style={{ top: "5%", left: "5%" }}
+          style={{ top: "8%", left: "2%" }}
           transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
         >
           <Image
             alt="Animated Pickleball"
             className="object-contain"
-            height={90}
-            width={90}
+            height={120}
+            width={120}
             src="/rm/pickleball.png"
           />
         </motion.div>
@@ -42,14 +42,14 @@ export default function IndexPage() {
         <motion.div
           animate={{ y: [0, -20, 0], x: [0, -10, 0] }}
           className="absolute z-10"
-          style={{ top: "10%", right: "5%" }}
+          style={{ top: "10%", right: "2%" }}
           transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
         >
           <Image
             alt="Animated Racket"
             className="object-contain"
-            height={100}
-            width={100}
+            height={130}
+            width={130}
             src="/rm/racket.png"
           />
         </motion.div>
@@ -57,14 +57,14 @@ export default function IndexPage() {
         <motion.div
           animate={{ y: [0, 20, 0], x: [0, 10, 0] }}
           className="absolute z-10"
-          style={{ bottom: "10%", left: "5%" }}
+          style={{ bottom: "8%", left: "2%" }}
           transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
         >
           <Image
             alt="Animated Racket"
             className="object-contain"
-            height={100}
-            width={100}
+            height={130}
+            width={130}
             src="/rm/racket.png"
           />
         </motion.div>
@@ -72,21 +72,21 @@ export default function IndexPage() {
         <motion.div
           animate={{ y: [0, 20, 0], x: [0, -10, 0] }}
           className="absolute z-10"
-          style={{ bottom: "10%", right: "5%" }}
+          style={{ bottom: "8%", right: "2%" }}
           transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
         >
           <Image
             alt="Animated Pickleball"
             className="object-contain"
-            height={80}
-            width={80}
+            height={120}
+            width={120}
             src="/rm/pickleball.png"
           />
         </motion.div>
       </div>
 
       {/* Hero Section */}
-      <section className="relative z-10 py-10 px-6 md:py-16 md:px-10 flex flex-col md:flex-row items-center text-center md:text-left gap-12 md:gap-16">
+      <section className="relative z-10 py-14 px-6 md:py-20 md:px-10 flex flex-col md:flex-row items-center text-center md:text-left gap-12 md:gap-20">
         <motion.div
           animate={{ opacity: 1, y: 0 }}
           className="w-full md:w-1/2 flex justify-center"
@@ -96,8 +96,8 @@ export default function IndexPage() {
           <Image
             alt="Rally Metrics Logo"
             className="object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500"
-            height={280}
-            width={280}
+            height={320}
+            width={320}
             src="/rm/rm.png"
           />
         </motion.div>
@@ -129,27 +129,27 @@ export default function IndexPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-6 md:px-10 relative z-10">
+      <section className="pt-12 pb-28 px-6 md:px-10 relative z-10">
         <div className="grid gap-10 md:grid-cols-3">
           {[
             {
               title: "Real-Time Stats",
               description: "Access live stats to make smarter fantasy choices.",
-              icon: <BarChart className="text-orange-500 w-8 h-8" />,
+              icon: <BarChart className="text-orange-500 w-9 h-9" />,
               delay: 0,
             },
             {
               title: "AI-Powered",
               description:
                 "Gain an edge with AI-powered analysis and fantasy draft recommendations",
-              icon: <Wand2 className="text-orange-500 w-8 h-8" />,
+              icon: <Wand2 className="text-orange-500 w-9 h-9" />,
               delay: 0.1,
             },
             {
               title: "Visual Dashboards",
               description:
                 "Explore team analytics and performance breakdowns easily.",
-              icon: <LayoutDashboard className="text-orange-500 w-8 h-8" />,
+              icon: <LayoutDashboard className="text-orange-500 w-9 h-9" />,
               delay: 0.2,
             },
           ].map((item) => (
