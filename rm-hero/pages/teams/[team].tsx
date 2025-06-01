@@ -226,7 +226,7 @@ export default function TeamPage() {
   animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
   className="absolute z-20 hidden md:block"
   style={{ top: "20%", left: "5%" }}
-  transition={{ repeat: Infinity, duration: 1, ease: "easeInOut" }}
+  transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
 >
   <Image
     alt="Animated Racket"

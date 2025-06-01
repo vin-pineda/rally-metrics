@@ -52,7 +52,7 @@ export default function TeamsPage() {
           <motion.div
             animate={{ y: [0, 15, 0], x: [0, -10, 0] }}
             className="absolute z-20"
-            style={{ top: "10", right: "10%" }}
+            style={{ top: "10%", right: "10%" }}
             transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
           >
             <Image
