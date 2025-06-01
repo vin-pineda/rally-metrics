@@ -27,8 +27,9 @@ export default function SearchPage() {
   useEffect(() => {
     const query = new URLSearchParams(); 
 
-    if (name) query.append("team", team as string);
-    if (team) query.append("name", name as string);
+    if (name) query.append("name", name as string);
+    if (team) query.append("team", team as string);
+
     fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/player?${query.toString()}`)
     .then(async (res) => {
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
