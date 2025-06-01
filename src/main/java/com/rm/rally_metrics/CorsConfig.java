@@ -14,8 +14,9 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins(
-                                "http://localhost:3000",              // dev
-                                "https://rally-metrics.vercel.app"    // production
+                                "http://localhost:3000",
+                                "https://rally-metrics.vercel.app",
+                                "https://rally-metrics-okkljqbdb-vincent-pinedas-projects.vercel.app" // ← add this!
                         )
                         .allowedMethods("*");
             }
