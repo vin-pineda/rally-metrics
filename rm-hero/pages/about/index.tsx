@@ -12,18 +12,18 @@ export default function AboutPage() {
       <div className="max-w-5xl mx-auto px-6 pt-20 pb-32 text-center">
         <motion.h1
           animate={{ opacity: 1, y: 0 }}
-          className="text-5xl font-bold mb-8"
           initial={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.5 }}
+          className="text-5xl font-bold mb-8"
         >
           About
         </motion.h1>
 
         <motion.p
           animate={{ opacity: 1 }}
-          className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-700 dark:text-gray-300 mb-6 sm:mb-8"
           initial={{ opacity: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
+          className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-700 dark:text-gray-300 mb-6 sm:mb-8"
         >
           I grew up playing pickleball with my friends, hitting the courts in
           our spare time just for fun. During COVID, what started as a casual
@@ -39,10 +39,10 @@ export default function AboutPage() {
           >
             <Image
               alt="Rally Metrics Logo"
-              height={200}
-              width={200}
-              className="object-contain max-w-full h-auto"
               src="/rm/rm.png"
+              width={200}
+              height={200}
+              className="object-contain max-w-full h-auto"
             />
           </motion.div>
 
@@ -58,10 +58,10 @@ export default function AboutPage() {
             >
               <Image
                 alt="Pickleball"
+                src="/rm/pickleball.png"
                 width={200}
                 height={200}
                 className="object-contain max-w-full h-auto"
-                src="/rm/pickleball.png"
               />
             </motion.div>
           )}
@@ -78,10 +78,10 @@ export default function AboutPage() {
             >
               <Image
                 alt="Pickleball Racket"
-                height={200}
-                width={200}
-                className="object-contain max-w-full h-auto"
                 src="/rm/racket.png"
+                width={200}
+                height={200}
+                className="object-contain max-w-full h-auto"
               />
             </motion.div>
           )}
@@ -89,9 +89,9 @@ export default function AboutPage() {
 
         <motion.p
           animate={{ opacity: 1 }}
-          className="text-lg leading-relaxed text-gray-700 dark:text-gray-300 mb-8"
           initial={{ opacity: 0 }}
           transition={{ delay: 0.6, duration: 0.6 }}
+          className="text-lg leading-relaxed text-gray-700 dark:text-gray-300 mb-8"
         >
           As I got more into the sport, I became a huge fan of Major League
           Pickleball (MLP). But I quickly ran into a consistent problem &mdash;
@@ -101,9 +101,9 @@ export default function AboutPage() {
 
         <motion.p
           animate={{ opacity: 1 }}
-          className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-700 dark:text-gray-300 mb-6 sm:mb-8"
           initial={{ opacity: 0 }}
           transition={{ delay: 0.7, duration: 0.6 }}
+          className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-700 dark:text-gray-300 mb-6 sm:mb-8"
         >
           That&apos;s why I created Rally Metrics. Whether you&apos;re a fantasy
           pickleball fanatic or just curious, I&apos;m here to give you the edge.
@@ -111,9 +111,9 @@ export default function AboutPage() {
 
         <motion.p
           animate={{ opacity: 1 }}
-          className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-700 dark:text-gray-300 mb-6 sm:mb-8"
           initial={{ opacity: 0 }}
           transition={{ delay: 0.8, duration: 0.6 }}
+          className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-700 dark:text-gray-300 mb-6 sm:mb-8"
         >
           <br />
           - Vin

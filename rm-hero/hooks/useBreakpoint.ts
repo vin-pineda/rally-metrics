@@ -7,7 +7,7 @@ export function useBreakpoint(breakpoint = 640) {
     const handleResize = () => {
       setIsBelow(window.innerWidth < breakpoint);
     };
-    handleResize(); // check on mount
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [breakpoint]);

@@ -60,8 +60,6 @@ export const Navbar = () => {
   return (
     <>
       <HeroUINavbar maxWidth="xl" position="sticky">
-
-        {/* LEFT SIDE BRAND */}
         <NavbarContent justify="start">
           <NavbarBrand className="gap-3 max-w-fit">
             <NextLink className="flex items-center gap-1" href="/">
@@ -76,7 +74,6 @@ export const Navbar = () => {
             </NextLink>
           </NavbarBrand>
 
-          {/* DESKTOP NAV LINKS */}
           <div className="hidden lg:flex gap-4 ml-2">
             {siteConfig.navItems.map((item) => (
               <NavbarItem key={item.href}>
@@ -94,7 +91,6 @@ export const Navbar = () => {
           </div>
         </NavbarContent>
 
-        {/* RIGHT SIDE — DESKTOP */}
         <NavbarContent justify="end" className="hidden lg:flex gap-4 items-center">
           <NavbarItem>
             <Link
@@ -134,7 +130,6 @@ export const Navbar = () => {
           </NavbarItem>
         </NavbarContent>
 
-        {/* RIGHT SIDE — MOBILE + TABLET */}
         <NavbarContent justify="end" className="flex lg:hidden gap-2 items-center">
           <Link
             isExternal
@@ -150,7 +145,6 @@ export const Navbar = () => {
           <NavbarMenuToggle />
         </NavbarContent>
 
-        {/* DROPDOWN MENU — MOBILE/TABLET */}
         <NavbarMenu>
           {searchInput}
           <br />

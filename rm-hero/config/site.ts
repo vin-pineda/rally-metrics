@@ -9,13 +9,11 @@ export const siteConfig = {
       label: "Teams",
       href: "/teams",
     },
-
     {
       label: "About",
       href: "/about",
     },
   ],
-  
   links: {
     github: "https://github.com/vin-pineda",
     sponsor: "https://www.majorleaguepickleball.co/",

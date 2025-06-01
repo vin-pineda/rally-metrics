@@ -16,7 +16,6 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
   classNames,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
-
   const { theme, setTheme } = useTheme();
 
   const onChange = () => {

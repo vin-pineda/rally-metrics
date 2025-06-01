@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 import DefaultLayout from "@/layouts/default";
 import { useBreakpoint } from "@/hooks/useBreakpoint";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 
 type Player = {
   name: string;
@@ -242,9 +242,7 @@ export default function TeamPage() {
       )}
 
       <div className="relative overflow-hidden min-h-screen">
-        {/* Arrows */}
         <div className="relative z-20 w-full flex justify-center items-center mt-2">
-          {/* Arrows on the sides */}
           {currentIndex > 0 && (
             <button
               className="fixed z-50 p-2 rounded-full bg-white dark:bg-neutral-800 shadow-md hover:scale-110 hover:shadow-xl transition
@@ -329,8 +327,13 @@ export default function TeamPage() {
                             {player.name}
                           </td>
                           <td className="w-6 text-center cursor-pointer" onClick={() => handleTogglePlayer(player)}>
-                            {expandedPlayer === player.name ? "▼" : "▶"}
+                            {expandedPlayer === player.name ? (
+                              <ChevronDownIcon className="h-4 w-4 text-gray-600 dark:text-gray-300 mx-auto" />
+                            ) : (
+                              <ChevronRightIcon className="h-4 w-4 text-gray-600 dark:text-gray-300 mx-auto" />
+                            )}
                           </td>
+                          
                           <td className="px-6 py-4">{player.rank}</td>
                           <td className="px-6 py-4">{player.gamesWon}</td>
                           <td className="px-6 py-4">{player.gamesLost}</td>

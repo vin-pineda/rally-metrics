@@ -72,64 +72,62 @@ export default function TeamsPage() {
         </h1>
 
         <div
-  className="
-    grid
-    grid-cols-2
-    sm:grid-cols-3
-    md:grid-cols-3
-    lg:grid-cols-4
-    gap-y-16
-    gap-x-10
-    px-6
-    md:px-14
-    xl:px-20
-    justify-items-center
-    max-w-[100%]
-    mx-auto
-  "
->
-  {teams.map((team, index) => (
-    <motion.div
-      key={team.name}
-      animate={{ opacity: 1, y: 0 }}
-      initial={{ opacity: 0, y: 30 }}
-      transition={{ duration: 0.4, delay: index * 0.03 }}
-    >
-      <Card
-        isHoverable
-        as={Link}
-        className="
-  w-[8.5rem] h-[8.5rem]
-  sm:w-[9.5rem] sm:h-[9.5rem]
-  md:w-[10rem] md:h-[10rem]
-  lg:w-[11rem] lg:h-[11rem]
-  rounded-2xl bg-white dark:bg-black
-  border-[6px] border-black dark:border-gray-700
-  hover:bg-orange-500 dark:hover:bg-orange-500
-  hover:border-orange-500 dark:hover:border-orange-500
-  transition-all duration-200 ease-in-out
-  hover:shadow-md dark:hover:shadow-md
-  focus-visible:ring-2 focus-visible:ring-orange-400 dark:focus-visible:ring-orange-500
-  transform hover:scale-[1.08]"
-
-        href={team.route}
-        {...(!disableTooltips && { title: team.name })}
-      >
-        <CardBody className="w-full h-full p-0 flex items-center justify-center">
-          <div className="relative w-full h-full">
-            <Image
-              fill
-              alt={`${team.name} Logo`}
-              src={team.logo}
-              className="object-contain max-w-full h-auto rounded-xl"
-            />
-          </div>
-        </CardBody>
-      </Card>
-    </motion.div>
-  ))}
-</div>
-
+          className="
+            grid
+            grid-cols-2
+            sm:grid-cols-3
+            md:grid-cols-3
+            lg:grid-cols-4
+            gap-y-16
+            gap-x-10
+            px-6
+            md:px-14
+            xl:px-20
+            justify-items-center
+            max-w-[100%]
+            mx-auto
+          "
+        >
+          {teams.map((team, index) => (
+            <motion.div
+              key={team.name}
+              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              transition={{ duration: 0.4, delay: index * 0.03 }}
+            >
+              <Card
+                isHoverable
+                as={Link}
+                className="
+                  w-[8.5rem] h-[8.5rem]
+                  sm:w-[9.5rem] sm:h-[9.5rem]
+                  md:w-[10rem] md:h-[10rem]
+                  lg:w-[11rem] lg:h-[11rem]
+                  rounded-2xl bg-white dark:bg-black
+                  border-[6px] border-black dark:border-gray-700
+                  hover:bg-orange-500 dark:hover:bg-orange-500
+                  hover:border-orange-500 dark:hover:border-orange-500
+                  transition-all duration-200 ease-in-out
+                  hover:shadow-md dark:hover:shadow-md
+                  focus-visible:ring-2 focus-visible:ring-orange-400 dark:focus-visible:ring-orange-500
+                  transform hover:scale-[1.08]"
+                href={team.route}
+                {...(!disableTooltips && { title: team.name })}
+              >
+                <CardBody className="w-full h-full p-0 flex items-center justify-center">
+                  <div className="relative w-full h-full">
+                    <Image
+                      fill
+                      alt={`${team.name} Logo`}
+                      src={team.logo}
+                      className="object-contain max-w-full h-auto rounded-xl"
+                    />
+                  </div>
+                </CardBody>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
       </section>
     </DefaultLayout>
   );
