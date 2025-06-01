@@ -8,12 +8,12 @@ type Player = {
   name: string;
   rank: number;
   team: string;
-  games_won: number;
-  games_lost: number;
-  games_won_percent: number;
-  pts_won: number;
-  pts_lost: number;
-  pts_won_percent: number;
+  gamesWon: number;
+  gamesLost: number;
+  gamesWonPercent: number;
+  ptsWon: number;
+  ptsLost: number;
+  ptsWonPercent: number;
 };
 
 export default function SearchPage() {
@@ -36,9 +36,21 @@ export default function SearchPage() {
         return text ? JSON.parse(text) : [];
       })
       .then((data) => {
-        setPlayers(data);
-        setLoading(false);
-      })
+  const formatted = data.map((p: any): Player => ({
+    name: p.name,
+    rank: p.rank,
+    team: p.team,
+    gamesWon: p.games_won,
+    gamesLost: p.games_lost,
+    gamesWonPercent: p.games_won_percent,
+    ptsWon: p.pts_won,
+    ptsLost: p.pts_lost,
+    ptsWonPercent: p.pts_won_percent,
+  }));
+  setPlayers(formatted);
+  setLoading(false);
+})
+
       .catch(() => {
         setLoading(false);
       })
@@ -122,15 +134,15 @@ export default function SearchPage() {
                       </td>
                       <td className="px-6 py-4">{player.team}</td>
                       <td className="px-6 py-4">{player.rank}</td>
-                      <td className="px-6 py-4">{player.games_won}</td>
-                      <td className="px-6 py-4">{player.games_lost}</td>
+                      <td className="px-6 py-4">{player.gamesWon}</td>
+                      <td className="px-6 py-4">{player.gamesLost}</td>
                       <td className="px-6 py-4">
-                        {player.games_won_percent.toFixed(1)}%
+                        {player.gamesWonPercent.toFixed(1)}%
                       </td>
-                      <td className="px-6 py-4">{player.pts_won}</td>
-                      <td className="px-6 py-4">{player.pts_lost}</td>
+                      <td className="px-6 py-4">{player.ptsWon}</td>
+                      <td className="px-6 py-4">{player.ptsLost}</td>
                       <td className="px-6 py-4">
-                        {player.pts_won_percent.toFixed(1)}%
+                        {player.ptsWonPercent.toFixed(1)}%
                       </td>
                     </tr>
                     {expandedPlayer === player.name && (
