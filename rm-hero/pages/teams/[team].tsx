@@ -175,7 +175,8 @@ export default function TeamPage() {
   };
 
   const isMobile = useBreakpoint(480);
-  const isTabletOrSmaller = useBreakpoint(1024); 
+  const isNarrowScreen = useBreakpoint(1760);
+
 
   const handleTogglePlayer = async (player: Player) => {
     const isExpanded = expandedPlayer === player.name;
@@ -221,23 +222,25 @@ export default function TeamPage() {
 
   return (
     <DefaultLayout>
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <motion.div
-  animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
-  className="absolute z-20 hidden md:block"
-  style={{ top: "20%", left: "5%" }}
-  transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
->
-  <Image
-    alt="Animated Racket"
-    className="object-contain"
-    height={125}
-    src="/rm/racket.png"
-    width={250}
-  />
-</motion.div>
+      {!isNarrowScreen && (
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+          <motion.div
+            animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
+            className="absolute z-20"
+            style={{ top: "22.5%", left: "2.5%" }}
+            transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+          >
+            <Image
+              alt="Animated Racket"
+              className="object-contain"
+              height={300}
+              src="/rm/racket.png"
+              width={300}
+            />
+          </motion.div>
+        </div>
+      )}
 
-      </div>
       <div className="relative overflow-hidden min-h-screen">
         {/* Arrows */}
         <div className="relative z-20 w-full flex justify-center items-center mt-2">
