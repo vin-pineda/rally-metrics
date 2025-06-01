@@ -1,5 +1,4 @@
-import * as React from "react";
-
+import React from "react";
 import { IconSvgProps } from "@/types";
 
 export const Logo: React.FC<IconSvgProps> = ({
@@ -64,6 +63,7 @@ export const TwitterIcon: React.FC<IconSvgProps> = ({
     </svg>
   );
 };
+
 
 export const GithubIcon: React.FC<IconSvgProps> = ({
   size = 24,

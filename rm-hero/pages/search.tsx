@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import React from "react";
 
 import DefaultLayout from "@/layouts/default";
 
@@ -25,13 +26,13 @@ export default function SearchPage() {
   const [summaries, setSummaries] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    const query = new URLSearchParams(); 
+    const query = new URLSearchParams();
 
     if (name) query.append("name", name as string);
     if (team) query.append("team", team as string);
 
     fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/player?${query.toString()}`)
-    .then(async (res) => {
+      .then(async (res) => {
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         const text = await res.text();
         return text ? JSON.parse(text) : [];
@@ -51,32 +52,30 @@ export default function SearchPage() {
         setPlayers(formatted);
         setLoading(false);
       })
-
       .catch(() => {
         setLoading(false);
-      })
-    }, [name, team]);
-    
-    const toggleSummary = async (player: Player) => {
-      const isExpanded = expandedPlayer === player.name; 
-      setExpandedPlayer(isExpanded ? null : player.name);
-      if (!summaries[player.name]) {
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/player/${encodeURIComponent(player.name)}/summary`
-          );
-          const text = await res.text(); 
+      });
+  }, [name, team]);
 
-          setSummaries((prev) => ({ ...prev, [player.name]: text }));
-        } catch (err) {
-          setSummaries((prev) => ({
-            ...prev,
-            [player.name]: "Failed to load summary.",
-          }));
-        }
+  const toggleSummary = async (player: Player) => {
+    const isExpanded = expandedPlayer === player.name;
+    setExpandedPlayer(isExpanded ? null : player.name);
+    if (!summaries[player.name]) {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/player/${encodeURIComponent(player.name)}/summary`
+        );
+        const text = await res.text();
+
+        setSummaries((prev) => ({ ...prev, [player.name]: text }));
+      } catch (err) {
+        setSummaries((prev) => ({
+          ...prev,
+          [player.name]: "Failed to load summary.",
+        }));
       }
-    };
-
+    }
+  };
 
   return (
     <DefaultLayout>
@@ -116,11 +115,8 @@ export default function SearchPage() {
               </thead>
               <tbody>
                 {players.map((player) => (
-                  <>
-                    <tr
-                      key={player.name}
-                      className="even:bg-gray-50 dark:even:bg-neutral-700/50 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-all"
-                    >
+                  <React.Fragment key={player.name}>
+                    <tr className="even:bg-gray-50 dark:even:bg-neutral-700/50 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-all">
                       <td
                         className="px-6 py-4 font-semibold cursor-pointer"
                         onClick={() => toggleSummary(player)}
@@ -149,14 +145,16 @@ export default function SearchPage() {
                     {expandedPlayer === player.name && (
                       <tr>
                         <td
-                          className="px-6 py-4 italic text-gray-600 dark:text-gray-300 bg-neutral-50 dark:bg-neutral-700 whitespace-pre-line"
+                          className="px-6 py-4 italic text-gray-600 dark:text-gray-300 bg-neutral-50 dark:bg-neutral-700"
                           colSpan={10}
                         >
-                          {summaries[player.name] || "Loading summary..."}
+                          <p className="line-clamp-5 whitespace-pre-line">
+                            {summaries[player.name] || "Loading summary..."}
+                          </p>
                         </td>
                       </tr>
                     )}
-                  </>
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>

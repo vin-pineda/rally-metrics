@@ -1,25 +1,22 @@
+// layouts/default.tsx
 import { Link } from "@heroui/link";
-
 import { Head } from "./head";
-
 import { Navbar } from "@/components/navbar";
 
-export default function DefaultLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative flex flex-col h-screen">
+    <div className="flex flex-col min-h-screen">
       <Head />
       <Navbar />
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
-        {children}
+      <main className="flex-grow overflow-auto">
+        <div className="container mx-auto max-w-7xl px-6 pt-16 pb-40">
+          {children}
+        </div>
       </main>
-      <footer className="w-full flex items-center justify-center py-3">
+      <footer className="w-full flex items-center justify-center py-6 px-4 bg-white dark:bg-neutral-900 z-50">
         <Link
           isExternal
-          className="flex items-center gap-1 text-current"
+          className="flex items-center gap-1 text-current text-sm sm:text-base"
           href="https://www.linkedin.com/in/vincent-pineda8/"
           title="linkedin.com/in/vincent-pineda8 homepage"
         >

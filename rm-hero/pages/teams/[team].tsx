@@ -4,6 +4,8 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 import DefaultLayout from "@/layouts/default";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
 type Player = {
   name: string;
@@ -172,6 +174,9 @@ export default function TeamPage() {
     if (nextSlug) router.push(`/teams/${nextSlug}`);
   };
 
+  const isMobile = useBreakpoint(480);
+  const isTabletOrSmaller = useBreakpoint(1024); 
+
   const handleTogglePlayer = async (player: Player) => {
     const isExpanded = expandedPlayer === player.name;
     setExpandedPlayer(isExpanded ? null : player.name);
@@ -214,57 +219,61 @@ export default function TeamPage() {
     }
   }, [router.isReady, backendTeamName]);
 
-
   return (
     <DefaultLayout>
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <motion.div
-          animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
-          className="absolute z-20"
-          style={{ top: "20%", left: "5%" }}
-          transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-        >
-          <Image
-            alt="Animated Racket Top Right"
-            className="object-contain"
-            height={125}
-            src="/rm/racket.png"
-            width={250}
-          />
-        </motion.div>
-      </div>
+  animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
+  className="absolute z-20 hidden md:block"
+  style={{ top: "20%", left: "5%" }}
+  transition={{ repeat: Infinity, duration: 1, ease: "easeInOut" }}
+>
+  <Image
+    alt="Animated Racket"
+    className="object-contain"
+    height={125}
+    src="/rm/racket.png"
+    width={250}
+  />
+</motion.div>
 
+      </div>
       <div className="relative overflow-hidden min-h-screen">
-        <div className="fixed top-1/2 left-10 right-10 z-50 flex justify-between px-4 md:px-8 pointer-events-none">
+        {/* Arrows */}
+        <div className="relative z-20 w-full flex justify-center items-center mt-2">
+          {/* Arrows on the sides */}
           {currentIndex > 0 && (
             <button
-              className="fixed top-1/2 left-2 sm:left-20 transform -translate-y-1/2 z-50 p-4 rounded-full bg-white dark:bg-neutral-800 shadow-md hover:scale-110 hover:shadow-xl transition pointer-events-auto"
+              className="fixed z-50 p-2 rounded-full bg-white dark:bg-neutral-800 shadow-md hover:scale-110 hover:shadow-xl transition
+                         top-[10%] left-2 md:top-1/2 md:left-4 md:transform md:-translate-y-1/2"
               onClick={() => goToTeam(currentIndex - 1)}
             >
-              ◀
+              <ChevronLeftIcon className="w-6 h-6" />
             </button>
           )}
+
           {currentIndex < teamSlugsOrdered.length - 1 && (
             <button
-              className="fixed top-1/2 right-2 sm:right-20 transform -translate-y-1/2 z-50 p-4 rounded-full bg-white dark:bg-neutral-800 shadow-md hover:scale-110 hover:shadow-xl transition pointer-events-auto"
+              className="fixed z-50 p-2 rounded-full bg-white dark:bg-neutral-800 shadow-md hover:scale-110 hover:shadow-xl transition
+                         top-[10%] right-2 md:top-1/2 md:right-4 md:transform md:-translate-y-1/2"
               onClick={() => goToTeam(currentIndex + 1)}
             >
-              ▶
+              <ChevronRightIcon className="w-6 h-6" />
             </button>
           )}
+
+
         </div>
 
         <div className="relative z-10 p-6 md:p-10 flex flex-col md:flex-row gap-10 md:gap-16 justify-center items-start">
           <div className="md:w-1/3 w-full text-center md:text-left min-h-[410px]">
-            <div
-              className={`border-8 ${teamStyle.border} rounded-xl transition-transform hover:scale-105 w-[360px] mx-auto`}
-            >
+            <div className={`border-8 ${teamStyle.border} rounded-xl transition-transform hover:scale-105 w-[360px] mx-auto`}>
               <Image
                 alt={`${backendTeamName} Logo`}
                 className="rounded-lg mx-auto"
                 height={360}
-                src={`/teams/${logoFilename}`}
                 width={360}
+                src={`/teams/${logoFilename}`}
               />
             </div>
 
@@ -296,9 +305,7 @@ export default function TeamPage() {
             ) : (
               <div className="overflow-x-auto scrollbar-hide rounded-xl shadow-lg border dark:border-neutral-800">
                 <table className="w-full text-md bg-white dark:bg-neutral-800 text-gray-800 dark:text-white">
-                  <thead
-                    className={`sticky top-0 z-20 shadow-md ${teamStyle.thead} dark:text-white dark:bg-neutral-700`}
-                  >
+                  <thead className={`sticky top-0 z-20 shadow-md ${teamStyle.thead} dark:text-white dark:bg-neutral-700`}>
                     <tr>
                       <th className="px-6 py-4">Player</th>
                       <th className="w-6" />
@@ -314,10 +321,7 @@ export default function TeamPage() {
                   <tbody>
                     {players.map((player) => (
                       <>
-                        <tr
-                          key={player.name}
-                          className="even:bg-gray-50 dark:even:bg-neutral-700/50 transition-all hover:scale-[1.01] hover:bg-gray-100 dark:hover:bg-neutral-700"
-                        >
+                        <tr key={player.name} className="even:bg-gray-50 dark:even:bg-neutral-700/50 transition-all hover:scale-[1.01] hover:bg-gray-100 dark:hover:bg-neutral-700">
                           <td className="px-6 py-4 font-semibold cursor-pointer" onClick={() => handleTogglePlayer(player)}>
                             {player.name}
                           </td>
@@ -327,24 +331,14 @@ export default function TeamPage() {
                           <td className="px-6 py-4">{player.rank}</td>
                           <td className="px-6 py-4">{player.gamesWon}</td>
                           <td className="px-6 py-4">{player.gamesLost}</td>
-                          <td className="px-6 py-4">
-                            {player.gamesWonPercent != null ? player.gamesWonPercent.toFixed(1) + '%' : 'N/A'}
-                          </td>
+                          <td className="px-6 py-4">{player.gamesWonPercent != null ? player.gamesWonPercent.toFixed(1) + '%' : 'N/A'}</td>
                           <td className="px-6 py-4">{player.ptsWon}</td>
                           <td className="px-6 py-4">{player.ptsLost}</td>
-                          <td className="px-6 py-4">
-                            {player.ptsWonPercent != null ? player.ptsWonPercent.toFixed(1) + '%' : 'N/A'}
-                          </td>
-
-                                              
+                          <td className="px-6 py-4">{player.ptsWonPercent != null ? player.ptsWonPercent.toFixed(1) + '%' : 'N/A'}</td>
                         </tr>
-                                            
                         {expandedPlayer === player.name && (
                           <tr>
-                            <td
-                              className="px-6 py-4 text-sm italic text-gray-600 dark:text-gray-300 whitespace-pre-line bg-neutral-50 dark:bg-neutral-700"
-                              colSpan={9}
-                            >
+                            <td className="px-6 py-4 text-sm italic text-gray-600 dark:text-gray-300 whitespace-pre-line bg-neutral-50 dark:bg-neutral-700" colSpan={9}>
                               {summaries[player.name] || "Loading summary..."}
                             </td>
                           </tr>

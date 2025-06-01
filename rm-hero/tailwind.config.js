@@ -26,7 +26,8 @@ const config = {
       },
     },
   },
-  plugins: [heroui(), require("tailwind-scrollbar-hide")],
+  plugins: [require("@tailwindcss/line-clamp")],
+  plugins: [heroui(), require("tailwind-scrollbar-hide")]
 };
 
 export default config;

@@ -1,12 +1,15 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 import DefaultLayout from "@/layouts/default";
 
 export default function AboutPage() {
+  const isMobile = useBreakpoint(480);
+
   return (
     <DefaultLayout>
-      <div className="max-w-5xl mx-auto px-6 py-20 text-center">
+      <div className="max-w-5xl mx-auto px-6 pt-20 pb-32 text-center">
         <motion.h1
           animate={{ opacity: 1, y: 0 }}
           className="text-5xl font-bold mb-8"
@@ -18,7 +21,7 @@ export default function AboutPage() {
 
         <motion.p
           animate={{ opacity: 1 }}
-          className="text-lg leading-relaxed text-gray-700 dark:text-gray-300 mb-10"
+          className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-700 dark:text-gray-300 mb-6 sm:mb-8"
           initial={{ opacity: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
@@ -37,44 +40,51 @@ export default function AboutPage() {
             <Image
               alt="Rally Metrics Logo"
               height={200}
+              width={200}
+              className="object-contain max-w-full h-auto"
               src="/rm/rm.png"
-              width={200}
             />
           </motion.div>
 
-          <motion.div
-            animate={{ y: [0, 12, 0], rotate: [0, -2, 0] }}
-            transition={{
-              repeat: Infinity,
-              duration: 4.5,
-              ease: "easeInOut",
-              delay: 0.2,
-            }}
-          >
-            <Image
-              alt="Pickleball"
-              height={200}
-              src="/rm/pickleball.png"
-              width={200}
-            />
-          </motion.div>
+          {!isMobile && (
+            <motion.div
+              animate={{ y: [0, 12, 0], rotate: [0, -2, 0] }}
+              transition={{
+                repeat: Infinity,
+                duration: 4.5,
+                ease: "easeInOut",
+                delay: 0.2,
+              }}
+            >
+              <Image
+                alt="Pickleball"
+                width={200}
+                height={200}
+                className="object-contain max-w-full h-auto"
+                src="/rm/pickleball.png"
+              />
+            </motion.div>
+          )}
 
-          <motion.div
-            animate={{ y: [0, -14, 0], rotate: [0, 2, 0] }}
-            transition={{
-              repeat: Infinity,
-              duration: 4.3,
-              ease: "easeInOut",
-              delay: 0.4,
-            }}
-          >
-            <Image
-              alt="Pickleball Racket"
-              height={200}
-              src="/rm/racket.png"
-              width={200}
-            />
-          </motion.div>
+          {!isMobile && (
+            <motion.div
+              animate={{ y: [0, -14, 0], rotate: [0, 2, 0] }}
+              transition={{
+                repeat: Infinity,
+                duration: 4.3,
+                ease: "easeInOut",
+                delay: 0.4,
+              }}
+            >
+              <Image
+                alt="Pickleball Racket"
+                height={200}
+                width={200}
+                className="object-contain max-w-full h-auto"
+                src="/rm/racket.png"
+              />
+            </motion.div>
+          )}
         </div>
 
         <motion.p
@@ -91,7 +101,7 @@ export default function AboutPage() {
 
         <motion.p
           animate={{ opacity: 1 }}
-          className="text-lg leading-relaxed text-gray-700 dark:text-gray-300"
+          className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-700 dark:text-gray-300 mb-6 sm:mb-8"
           initial={{ opacity: 0 }}
           transition={{ delay: 0.7, duration: 0.6 }}
         >
@@ -101,13 +111,13 @@ export default function AboutPage() {
 
         <motion.p
           animate={{ opacity: 1 }}
-          className="text-lg leading-relaxed text-gray-700 dark:text-gray-300"
+          className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-700 dark:text-gray-300 mb-6 sm:mb-8"
           initial={{ opacity: 0 }}
           transition={{ delay: 0.8, duration: 0.6 }}
-        ><br />
+        >
+          <br />
           - Vin
         </motion.p>
-
       </div>
     </DefaultLayout>
   );

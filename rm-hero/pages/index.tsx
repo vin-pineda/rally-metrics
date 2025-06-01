@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BarChart, Wand2, LayoutDashboard } from "lucide-react";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 import { title, subtitle } from "../components/primitives";
 
@@ -13,6 +14,7 @@ import DefaultLayout from "@/layouts/default";
 export default function IndexPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const isSmallScreen = useBreakpoint(500); // Adjust as needed
 
   useEffect(() => {
     setMounted(true);
@@ -23,67 +25,69 @@ export default function IndexPage() {
   return (
     <DefaultLayout>
       {/* Floating Icons */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <motion.div
-          animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
-          className="absolute z-10"
-          style={{ top: "8%", left: "2%" }}
-          transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-        >
-          <Image
-            alt="Animated Pickleball"
-            className="object-contain"
-            height={120}
-            width={120}
-            src="/rm/pickleball.png"
-          />
-        </motion.div>
+      {!isSmallScreen && (
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+          <motion.div
+            animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
+            className="absolute z-10"
+            style={{ top: "10%", left: "2%" }}
+            transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+          >
+            <Image
+              alt="Animated Pickleball"
+              className="object-contain max-w-full h-auto"
+              height={120}
+              width={120}
+              src="/rm/pickleball.png"
+            />
+          </motion.div>
 
-        <motion.div
-          animate={{ y: [0, -20, 0], x: [0, -10, 0] }}
-          className="absolute z-10"
-          style={{ top: "10%", right: "2%" }}
-          transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
-        >
-          <Image
-            alt="Animated Racket"
-            className="object-contain"
-            height={130}
-            width={130}
-            src="/rm/racket.png"
-          />
-        </motion.div>
+          <motion.div
+            animate={{ y: [0, -20, 0], x: [0, -10, 0] }}
+            className="absolute z-10"
+            style={{ top: "10%", right: "2%" }}
+            transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
+          >
+            <Image
+              alt="Animated Racket"
+              className="object-contain max-w-full h-auto"
+              height={130}
+              width={130}
+              src="/rm/racket.png"
+            />
+          </motion.div>
 
-        <motion.div
-          animate={{ y: [0, 20, 0], x: [0, 10, 0] }}
-          className="absolute z-10"
-          style={{ bottom: "8%", left: "2%" }}
-          transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
-        >
-          <Image
-            alt="Animated Racket"
-            className="object-contain"
-            height={130}
-            width={130}
-            src="/rm/racket.png"
-          />
-        </motion.div>
+          <motion.div
+            animate={{ y: [0, 20, 0], x: [0, 10, 0] }}
+            className="absolute z-10"
+            style={{ bottom: "16%", left: "2%" }}
+            transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+          >
+            <Image
+              alt="Animated Racket"
+              className="object-contain max-w-full h-auto"
+              height={130}
+              width={130}
+              src="/rm/racket.png"
+            />
+          </motion.div>
 
-        <motion.div
-          animate={{ y: [0, 20, 0], x: [0, -10, 0] }}
-          className="absolute z-10"
-          style={{ bottom: "8%", right: "2%" }}
-          transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
-        >
-          <Image
-            alt="Animated Pickleball"
-            className="object-contain"
-            height={120}
-            width={120}
-            src="/rm/pickleball.png"
-          />
-        </motion.div>
-      </div>
+          <motion.div
+            animate={{ y: [0, 20, 0], x: [0, -10, 0] }}
+            className="absolute z-10"
+            style={{ bottom: "16%", right: "2%" }}
+            transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+          >
+            <Image
+              alt="Animated Pickleball"
+              className="object-contain max-w-full h-auto"
+              height={120}
+              width={120}
+              src="/rm/pickleball.png"
+            />
+          </motion.div>
+        </div>
+      )}
 
       {/* Hero Section */}
       <section className="relative z-10 py-14 px-6 md:py-20 md:px-10 flex flex-col md:flex-row items-center text-center md:text-left gap-12 md:gap-20">
@@ -108,9 +112,9 @@ export default function IndexPage() {
           initial={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <h1 className={`${title()} tracking-tight leading-tight`}>
-            The <span className={title({ color: "yellow" })}>smartest</span> way
-            to draft your <span className={title({ color: "yellow" })}>MLP</span>{" "}
+          <h1 className={`${title({ size: "sm" })} tracking-tight leading-tight`}>
+            The <span className={title({ color: "yellow", size: "sm" })}>smartest</span> way
+            to draft your <span className={title({ color: "yellow", size: "sm" })}>MLP</span>{" "}
             fantasy team starts here.
           </h1>
           <p className={subtitle()}>
@@ -118,9 +122,10 @@ export default function IndexPage() {
           </p>
           <Link href="/teams">
             <Button
-              className="transition-transform duration-200 hover:scale-105"
+              variant="solid"
               color="primary"
               size="lg"
+              className="transition-transform duration-200 hover:scale-105"
             >
               Get Started
             </Button>
