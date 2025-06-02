@@ -268,7 +268,7 @@ export default function TeamPage() {
 
         <div className="relative z-10 p-6 md:p-10 flex flex-col md:flex-row gap-10 md:gap-16 justify-center items-start">
           <div className="md:w-1/3 w-full text-center md:text-left min-h-[410px]">
-            <div className={`border-8 ${teamStyle.border} rounded-xl transition-transform hover:scale-105 w-[360px] mx-auto`}>
+            <div className={`border-8 ${teamStyle.border} rounded-xl transition-transform md:hover:scale-105 w-[360px] mx-auto`}>
               <Image
                 alt={`${backendTeamName} Logo`}
                 className="rounded-lg mx-auto"
