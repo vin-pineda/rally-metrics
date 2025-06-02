@@ -24,7 +24,6 @@ export default function IndexPage() {
 
   return (
     <DefaultLayout>
-      {/* Animated Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <motion.div
           animate={{ y: [0, 20, 0], x: [0, 15, 0] }}
@@ -58,38 +57,43 @@ export default function IndexPage() {
           />
         </motion.div>
 
-        <motion.div
-          animate={{ y: [0, 20, 0], x: [0, 10, 0] }}
-          className="absolute z-10 max-[429px]:hidden"
-          style={{ bottom: "12%", left: "2%" }}
-          transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
-        >
-          <Image
-            alt="Animated Racket"
-            className="object-contain max-w-full h-auto"
-            height={80}
-            width={80}
-            src="/rm/racket.png"
-            sizes="(min-width: 768px) 110px, 80px"
-          />
-        </motion.div>
+        {!isSmallScreen && (
+          <motion.div
+            animate={{ y: [0, 20, 0], x: [0, 10, 0] }}
+            className="absolute z-10"
+            style={{ bottom: "12%", left: "2%" }}
+            transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+          >
+            <Image
+              alt="Animated Racket"
+              className="object-contain max-w-full h-auto"
+              height={80}
+              width={80}
+              src="/rm/racket.png"
+              sizes="(min-width: 768px) 110px, 80px"
+            />
+          </motion.div>
+        )}
 
-        <motion.div
-          animate={{ y: [0, 20, 0], x: [0, -10, 0] }}
-          className="absolute z-10 max-[429px]:hidden"
-          style={{ bottom: "12%", right: "2%" }}
-          transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
-        >
-          <Image
-            alt="Animated Pickleball"
-            className="object-contain max-w-full h-auto"
-            height={80}
-            width={80}
-            src="/rm/pickleball.png"
-            sizes="(min-width: 768px) 110px, 80px"
-          />
-        </motion.div>
+        {!isSmallScreen && (
+          <motion.div
+            animate={{ y: [0, 20, 0], x: [0, -10, 0] }}
+            className="absolute z-10"
+            style={{ bottom: "12%", right: "2%" }}
+            transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+          >
+            <Image
+              alt="Animated Pickleball"
+              className="object-contain max-w-full h-auto"
+              height={80}
+              width={80}
+              src="/rm/pickleball.png"
+              sizes="(min-width: 768px) 110px, 80px"
+            />
+          </motion.div>
+        )}
       </div>
+
 
       {/* Hero Section */}
       <section className="relative z-10 py-14 px-6 md:py-20 md:px-10 flex flex-col md:flex-row items-center text-center md:text-left gap-12 md:gap-20">
