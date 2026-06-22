@@ -10,11 +10,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class CorsConfig {
 
     /**
-     * Allowed CORS origins, configurable via the {@code rally.cors.allowed-origins}
-     * property (env: {@code RALLY_CORS_ALLOWED_ORIGINS}, comma-separated). Defaults
-     * to the local dev frontend plus the production domains.
+     * Allowed CORS origin patterns, configurable via the {@code rally.cors.allowed-origins}
+     * property (env: {@code RALLY_CORS_ALLOWED_ORIGINS}, comma-separated). Patterns support
+     * {@code *} wildcards, which is important because Vercel assigns a fresh hostname to every
+     * deployment (e.g. {@code rally-metrics-<hash>-<team>.vercel.app}); a single
+     * {@code https://*.vercel.app} pattern keeps preview + production builds working without
+     * chasing exact URLs. Defaults to the local dev frontend plus the Vercel + custom domains.
      */
-    @Value("${rally.cors.allowed-origins:http://localhost:3000,https://rally-metrics.vercel.app,https://www.rallymetrics.com,https://rallymetrics.com}")
+    @Value("${rally.cors.allowed-origins:http://localhost:3000,http://localhost:3001,https://*.vercel.app,https://www.rallymetrics.com,https://rallymetrics.com}")
     private String[] allowedOrigins;
 
     @Bean
@@ -23,7 +26,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins(allowedOrigins)
+                        .allowedOriginPatterns(allowedOrigins)
                         .allowedMethods("GET", "POST")
                         .allowedHeaders("Content-Type", "Accept");
             }
