@@ -56,7 +56,6 @@ export default function AboutPage() {
           >
             About
           </motion.h1>
-          
         </motion.div>
 
         <motion.div
@@ -148,12 +147,8 @@ export default function AboutPage() {
               transition={{ delay: 1.2, duration: 0.8 }}
             >
               <div className="text-left">
-                <p className="font-semibold text-lg text-gray-900">
-                  Vin
-                </p>
-                <p className="text-orange-600">
-                  Founder, Rally Metrics
-                </p>
+                <p className="font-semibold text-lg text-gray-900">Vin</p>
+                <p className="text-orange-600">Founder, Rally Metrics</p>
               </div>
             </motion.div>
           </motion.div>

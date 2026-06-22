@@ -13,7 +13,7 @@ export const siteConfig = {
       label: "Teams",
       href: "/teams",
     },
-    
+
     {
       label: "Match Predictor",
       href: "/predictor",

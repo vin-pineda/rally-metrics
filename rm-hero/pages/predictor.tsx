@@ -3,118 +3,130 @@ import { Button } from "@heroui/button";
 import { motion } from "framer-motion";
 
 import DefaultLayout from "@/layouts/default";
-import { useBreakpoint } from "@/hooks/useBreakpoint";
+import PlayerCard from "@/components/PlayerCard";
+import ModelInfoDisclosure from "@/components/ModelInfoDisclosure";
+import { Player } from "@/types/player";
 
-const slugToBackendName: Record<string, string> = {
-  "atlanta-bouncers": "Atlanta Bouncers",
-  "brooklyn-pickleball-team": "Brooklyn Pickleball Team",
-  "carolina-hogs": "Carolina Hogs",
-  "chicago-slice": "Chicago Slice",
-  "columbus-sliders": "Columbus Sliders",
-  "dallas-flash": "Dallas Flash",
-  "la-mad-drops": "Los Angeles Mad Drops",
-  "miami-pickleball-team": "Miami Pickleball Club",
-  "nj-fives": "New Jersey 5s",
-  "orlando-squeeze": "Orlando Squeeze",
-  "phoenix-flames": "Phoenix Flames",
-  "socal-hard-eights": "SoCal Hard Eights",
-  "stl-shock": "St. Louis Shock",
-  "texas-ranchers": "Texas Ranchers",
-  "utah-black-diamonds": "Utah Black Diamonds",
-  "new-york-hustlers": "New York Hustlers",
-};
-const backendToSlug = Object.fromEntries(
-  Object.entries(slugToBackendName).map(([slug, name]) => [name, slug]),
-);
-
-const teamColors: Record<string, { border: string; bg: string }> = {
-  "atlanta-bouncers": {
-    border: "border-orange-500",
-    bg: "bg-orange-100",
-  },
-  "brooklyn-pickleball-team": {
-    border: "border-gray-700",
-    bg: "bg-gray-100",
-  },
-  "carolina-hogs": {
-    border: "border-red-500",
-    bg: "bg-red-100",
-  },
-  "chicago-slice": {
-    border: "border-red-600",
-    bg: "bg-red-100",
-  },
-  "columbus-sliders": {
-    border: "border-blue-600",
-    bg: "bg-blue-100",
-  },
-  "dallas-flash": {
-    border: "border-sky-500",
-    bg: "bg-sky-100",
-  },
-  "la-mad-drops": {
-    border: "border-teal-500",
-    bg: "bg-teal-100",
-  },
-  "miami-pickleball-team": {
-    border: "border-pink-500",
-    bg: "bg-pink-100",
-  },
-  "nj-fives": {
-    border: "border-indigo-600",
-    bg: "bg-indigo-100",
-  },
-  "orlando-squeeze": {
-    border: "border-yellow-500",
-    bg: "bg-yellow-100",
-  },
-  "phoenix-flames": {
-    border: "border-red-500",
-    bg: "bg-red-100",
-  },
-  "socal-hard-eights": {
-    border: "border-sky-500",
-    bg: "bg-sky-100",
-  },
-  "stl-shock": {
-    border: "border-blue-600",
-    bg: "bg-blue-100",
-  },
-  "texas-ranchers": {
-    border: "border-blue-600",
-    bg: "bg-blue-100",
-  },
-  "utah-black-diamonds": {
-    border: "border-gray-700",
-    bg: "bg-gray-100",
-  },
-  "new-york-hustlers": {
-    border: "border-cyan-500",
-    bg: "bg-cyan-100",
-  },
+type KeyFactor = {
+  label: string;
+  display_a: string;
+  display_b: string;
+  advantage: "A" | "B" | "EVEN";
 };
 
-type Player = {
+type ScoutReport = {
+  archetype: string;
+  strengths: string[];
+  weaknesses: string[];
+  outlook: string;
+};
+
+type MatchPrediction = {
+  winner_name: string;
+  win_probability: number;
+  moneyline_odds: number;
+  reasoning: string;
+  confidence?: string;
+  key_factors?: KeyFactor[];
+  scouting_a?: ScoutReport;
+  scouting_b?: ScoutReport;
+  model_version?: string;
+};
+
+/**
+ * Single AI scouting report card (archetype pill, strengths, weaknesses,
+ * outlook). Renders a muted placeholder when the report is missing or the
+ * backend flagged it as unavailable.
+ */
+function ScoutingCard({
+  name,
+  report,
+}: {
   name: string;
-  rank: number;
-  team: string;
-  games_won: number;
-  games_lost: number;
-  games_won_percent: number;
-  pts_won: number;
-  pts_lost: number;
-  pts_won_percent: number;
-};
+  report?: ScoutReport;
+}) {
+  const unavailable =
+    !report ||
+    report.archetype === "Unavailable" ||
+    !report.strengths ||
+    report.strengths.length === 0;
+
+  return (
+    <div className="rounded-xl border border-gray-200 bg-gray-50/50 p-4">
+      <div className="text-xs text-gray-500 mb-1">{name}</div>
+
+      {unavailable ? (
+        <div className="text-sm text-gray-400 italic py-2">
+          Scouting unavailable
+        </div>
+      ) : (
+        <>
+          <div className="inline-block rounded-full bg-orange-50 border border-orange-200 px-3 py-1 text-xs font-semibold text-orange-600 mb-3">
+            {report.archetype}
+          </div>
+
+          {report.strengths.length > 0 && (
+            <div className="mb-3">
+              <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                Strengths
+              </div>
+              <ul className="space-y-1">
+                {report.strengths.map((s, i) => (
+                  <li
+                    key={`s-${i}`}
+                    className="flex gap-2 text-sm text-gray-700"
+                  >
+                    <span aria-hidden="true" className="text-green-500">
+                      ▲
+                    </span>
+                    <span>{s}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {report.weaknesses && report.weaknesses.length > 0 && (
+            <div className="mb-3">
+              <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                Weaknesses
+              </div>
+              <ul className="space-y-1">
+                {report.weaknesses.map((w, i) => (
+                  <li
+                    key={`w-${i}`}
+                    className="flex gap-2 text-sm text-gray-700"
+                  >
+                    <span aria-hidden="true" className="text-amber-500">
+                      ▼
+                    </span>
+                    <span>{w}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {report.outlook && (
+            <div className="text-sm text-gray-500 italic leading-relaxed">
+              {report.outlook}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
 
 export default function MatchPredictorPage() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [playerA, setPlayerA] = useState("");
   const [playerB, setPlayerB] = useState("");
-  const [prediction, setPrediction] = useState("");
+  const [prediction, setPrediction] = useState<MatchPrediction | null>(null);
+  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSelectAFocused, setIsSelectAFocused] = useState(false);
   const [isSelectBFocused, setIsSelectBFocused] = useState(false);
-  const isMobile = useBreakpoint(768);
   const selectARef = useRef<HTMLSelectElement>(null);
   const selectBRef = useRef<HTMLSelectElement>(null);
 
@@ -123,9 +135,9 @@ export default function MatchPredictorPage() {
       .then((res) => res.json())
       .then((data) =>
         setPlayers(
-          data
+          (data as Player[])
             .map(
-              (p: any): Player => ({
+              (p): Player => ({
                 name: p.name,
                 rank: p.rank,
                 team: p.team,
@@ -137,12 +149,11 @@ export default function MatchPredictorPage() {
                 pts_won_percent: p.pts_won_percent,
               }),
             )
-            .sort((a: Player, b: Player) => a.name.localeCompare(b.name))
-        )
+            .sort((a, b) => a.name.localeCompare(b.name)),
+        ),
       )
       .catch(() => setPlayers([]));
   }, []);
-
 
   const getPlayerData = (name: string) =>
     players.find((p) => p.name === name) || null;
@@ -152,7 +163,8 @@ export default function MatchPredictorPage() {
   const handlePredict = async () => {
     if (!playerA || !playerB || playerA === playerB) return;
     setLoading(true);
-    setPrediction("");
+    setPrediction(null);
+    setErrorMessage("");
 
     try {
       const res = await fetch(
@@ -163,109 +175,48 @@ export default function MatchPredictorPage() {
           body: JSON.stringify({ playerA, playerB }),
         },
       );
-      const text = await res.text();
 
-      setPrediction(text);
+      if (res.status === 404) {
+        const text = await res.text();
+
+        setErrorMessage(
+          text?.trim() ||
+            "One of the selected players could not be found. Please try again.",
+        );
+
+        return;
+      }
+
+      if (!res.ok) {
+        setErrorMessage("Error generating prediction. Please try again.");
+
+        return;
+      }
+
+      const data: MatchPrediction = await res.json();
+
+      setPrediction(data);
     } catch {
-      setPrediction("Error generating prediction.");
+      setErrorMessage("Error generating prediction. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  const getTeamClasses = (player: Player | null) => {
-    if (!player)
-      return { border: "border-gray-300", bg: "bg-white" };
-    const teamSlug = backendToSlug[player.team] || "";
-    const colors = teamColors[teamSlug];
+  const formatMoneyline = (odds: number) => (odds > 0 ? `+${odds}` : `${odds}`);
 
-    return {
-      border: colors?.border || "border-gray-300",
-      bg: colors?.bg || "bg-white",
-    };
+  const getConfidenceStyle = (confidence?: string) => {
+    switch (confidence?.toUpperCase()) {
+      case "HIGH":
+        return "bg-green-50 text-green-700 border border-green-200";
+      case "MEDIUM":
+        return "bg-amber-50 text-amber-700 border border-amber-200";
+      case "LOW":
+        return "bg-red-50 text-red-700 border border-red-200";
+      default:
+        return "bg-gray-50 text-gray-600 border border-gray-200";
+    }
   };
-
-  const renderPlayerCard = (player: Player | null) => {
-    if (!player) return null;
-    const teamSlug = backendToSlug[player.team] || "";
-    const colors = teamColors[teamSlug] || {
-      border: "border-gray-300",
-      bg: "bg-gray-100",
-    };
-
-    return (
-      <motion.div
-        animate={{ opacity: 1, y: 0 }}
-        className={`rounded-xl overflow-hidden border-2 ${colors.border} ${colors.bg} w-full transition-all shadow-xl`}
-        initial={{ opacity: 0, y: 20 }}
-        transition={{ duration: 0.3 }}
-        whileHover={{ scale: 1.02 }}
-      >
-        <div className="p-4">
-          <div className="flex justify-between items-start mb-3">
-            <div>
-              <div className="font-bold text-xl text-gray-900">
-                {player.name}
-              </div>
-              <div className="text-xs text-gray-500">
-                #{player.rank} Rank
-              </div>
-            </div>
-            <div className="px-3 py-1 rounded-full bg-black bg-opacity-10 text-xs font-semibold">
-              {player.team}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 mt-4">
-            <div className="flex flex-col">
-              <div className="text-xs text-gray-500">
-                W/L
-              </div>
-              <div className="font-semibold text-gray-900">
-                {player.games_won}
-                <span className="text-gray-400">/</span>
-                {player.games_lost}
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <div className="text-xs text-gray-500">
-                Win %
-              </div>
-              <div className="font-semibold text-gray-900">
-                {player.games_won_percent.toFixed(1)}%
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <div className="text-xs text-gray-500">
-                Points
-              </div>
-              <div className="font-semibold text-gray-900">
-                {player.pts_won}
-                <span className="text-gray-400">/</span>
-                {player.pts_lost}
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <div className="text-xs text-gray-500">
-                Pts %
-              </div>
-              <div className="font-semibold text-gray-900">
-                {player.pts_won_percent.toFixed(1)}%
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className={`h-2 ${colors.border.replace("border", "bg")}`} />
-      </motion.div>
-    );
-  };
-
-  const playerAClasses = getTeamClasses(playerAData);
-  const playerBClasses = getTeamClasses(playerBData);
 
   return (
     <DefaultLayout>
@@ -284,11 +235,13 @@ export default function MatchPredictorPage() {
           Match Predictor
         </motion.h1>
 
-        <p className="text-gray-600 mb-10 text-lg max-w-2xl mx-auto">
+        <p className="text-gray-600 mb-4 text-lg max-w-2xl mx-auto">
           Select two players and get a bold, AI-powered fantasy prediction.
         </p>
 
-        <div className="flex flex-col gap-8 md:flex-row md:justify-center md:items-start md:gap-10">
+        <ModelInfoDisclosure />
+
+        <div className="mt-10 flex flex-col gap-8 md:flex-row md:justify-center md:items-start md:gap-10">
           <div className="flex flex-col gap-4 w-full md:w-1/2">
             <div className="relative w-full">
               <select
@@ -296,16 +249,14 @@ export default function MatchPredictorPage() {
                 className={`rounded-xl px-4 py-3 text-center focus:ring-2 focus:outline-none transition-all border-2 w-full
                              text-gray-900 appearance-none pr-10 bg-white`}
                 value={playerA}
+                onBlur={() => setIsSelectAFocused(false)}
                 onChange={(e) => {
                   setPlayerA(e.target.value);
                   setTimeout(() => setIsSelectAFocused(false), 100);
                 }}
                 onFocus={() => setIsSelectAFocused(true)}
-                onBlur={() => setIsSelectAFocused(false)}
               >
-                <option value="">Select Player
-
-                </option>
+                <option value="">Select Player</option>
                 {players.map((p) => (
                   <option key={p.name} value={p.name}>
                     {p.name}
@@ -313,26 +264,27 @@ export default function MatchPredictorPage() {
                 ))}
               </select>
               <motion.div
-                className="pointer-events-none absolute right-3 top-[40%] -translate-y-1/2"
                 animate={{ rotate: isSelectAFocused ? 180 : 0 }}
+                className="pointer-events-none absolute right-3 top-[40%] -translate-y-1/2"
                 transition={{ duration: 0.2 }}
               >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
+                <svg
                   className="h-4 w-4 text-gray-600"
-                  viewBox="0 0 20 20" 
                   fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path 
-                  fillRule="evenodd" 
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" 
-                  clipRule="evenodd" />
+                  <path
+                    clipRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    fillRule="evenodd"
+                  />
                 </svg>
               </motion.div>
             </div>
-            {renderPlayerCard(playerAData)}
+            <PlayerCard player={playerAData} />
           </div>
-          
+
           <div className="flex justify-center items-center my-4 md:my-0">
             <motion.div
               animate={{ scale: [1, 1.1, 1] }}
@@ -346,16 +298,16 @@ export default function MatchPredictorPage() {
           <div className="flex flex-col gap-4 w-full md:w-1/2">
             <div className="relative w-full">
               <select
-                ref={selectARef}
+                ref={selectBRef}
                 className={`rounded-xl px-4 py-3 text-center focus:ring-2 focus:outline-none transition-all border-2 w-full
                              text-gray-900 appearance-none pr-10 bg-white`}
                 value={playerB}
+                onBlur={() => setIsSelectBFocused(false)}
                 onChange={(e) => {
                   setPlayerB(e.target.value);
                   setTimeout(() => setIsSelectBFocused(false), 100);
                 }}
                 onFocus={() => setIsSelectBFocused(true)}
-                onBlur={() => setIsSelectBFocused(false)}
               >
                 <option value="">Select Player</option>
                 {players.map((p) => (
@@ -365,24 +317,25 @@ export default function MatchPredictorPage() {
                 ))}
               </select>
               <motion.div
-                className="pointer-events-none absolute right-3 top-[40%] -translate-y-1/2"
                 animate={{ rotate: isSelectBFocused ? 180 : 0 }}
+                className="pointer-events-none absolute right-3 top-[40%] -translate-y-1/2"
                 transition={{ duration: 0.2 }}
               >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
+                <svg
                   className="h-4 w-4 text-gray-600"
-                  viewBox="0 0 20 20" 
                   fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path 
-                  fillRule="evenodd" 
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" 
-                  clipRule="evenodd" />
+                  <path
+                    clipRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    fillRule="evenodd"
+                  />
                 </svg>
               </motion.div>
             </div>
-            {renderPlayerCard(playerBData)}
+            <PlayerCard player={playerBData} />
           </div>
         </div>
 
@@ -404,9 +357,25 @@ export default function MatchPredictorPage() {
           >
             {loading ? (
               <div className="flex items-center justify-center">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    fill="currentColor"
+                  />
                 </svg>
                 Generating...
               </div>
@@ -416,15 +385,160 @@ export default function MatchPredictorPage() {
           </Button>
         </motion.div>
 
-        {prediction && (
-          <motion.div 
-            className="mt-12 p-6 max-w-3xl mx-auto rounded-2xl shadow-xl border border-gray-300 bg-white text-gray-900 whitespace-pre-line"
-            initial={{ opacity: 0, y: 20 }}
+        {errorMessage && (
+          <motion.div
             animate={{ opacity: 1, y: 0 }}
+            className="mt-12 p-6 max-w-3xl mx-auto rounded-2xl shadow-xl border border-red-200 bg-red-50 text-red-700"
+            initial={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.4 }}
           >
-            <div className="text-lg font-semibold mb-3 text-orange-500">Prediction:</div>
-            <div className="text-gray-700">{prediction}</div>
+            {errorMessage}
+          </motion.div>
+        )}
+
+        {prediction && (
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-12 p-6 md:p-8 max-w-3xl mx-auto rounded-2xl shadow-xl border border-gray-300 bg-white text-gray-900 text-left"
+            initial={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.4 }}
+          >
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <div className="text-sm font-semibold text-orange-500 uppercase tracking-wide">
+                Prediction
+              </div>
+              {prediction.confidence && (
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-medium ${getConfidenceStyle(
+                    prediction.confidence,
+                  )}`}
+                >
+                  {prediction.confidence.toUpperCase()} confidence
+                </span>
+              )}
+            </div>
+
+            <div className="text-xs text-gray-500 mb-4">
+              Multi-agent analysis · scouted, synthesized &amp; fact-checked
+            </div>
+
+            {prediction.confidence?.toUpperCase() === "LOW" && (
+              <div className="text-xs text-gray-500 mb-4 -mt-2">
+                Limited sample — interpret with caution.
+              </div>
+            )}
+
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+              <div>
+                <div className="text-xs text-gray-500">Predicted Winner</div>
+                <div className="text-3xl font-extrabold text-blue-600">
+                  {prediction.winner_name}
+                </div>
+              </div>
+
+              <div className="flex gap-6">
+                <div>
+                  <div className="text-xs text-gray-500">Win Probability</div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {(prediction.win_probability * 100).toFixed(1)}%
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">Moneyline</div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {formatMoneyline(prediction.moneyline_odds)}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {prediction.key_factors && prediction.key_factors.length > 0 && (
+              <div className="mb-6">
+                <div className="text-sm font-semibold text-orange-500 uppercase tracking-wide mb-3">
+                  Key Factors
+                </div>
+                <div className="overflow-hidden rounded-xl border border-gray-200">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-gray-50 text-gray-500">
+                        <th className="px-4 py-2.5 text-left font-medium" />
+                        <th className="px-4 py-2.5 text-right font-semibold text-gray-700">
+                          {playerA || "Player A"}
+                        </th>
+                        <th className="px-4 py-2.5 text-right font-semibold text-gray-700">
+                          {playerB || "Player B"}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {prediction.key_factors.map((factor, i) => {
+                        const aWins = factor.advantage === "A";
+                        const bWins = factor.advantage === "B";
+
+                        return (
+                          <tr
+                            key={`${factor.label}-${i}`}
+                            className="border-t border-gray-100"
+                          >
+                            <td className="px-4 py-2.5 text-left text-gray-600">
+                              {factor.label}
+                            </td>
+                            <td
+                              className={`px-4 py-2.5 text-right tabular-nums ${
+                                aWins
+                                  ? "font-bold text-orange-600 bg-orange-50"
+                                  : "text-gray-900"
+                              }`}
+                            >
+                              {aWins && <span aria-hidden="true">▲ </span>}
+                              {factor.display_a}
+                            </td>
+                            <td
+                              className={`px-4 py-2.5 text-right tabular-nums ${
+                                bWins
+                                  ? "font-bold text-orange-600 bg-orange-50"
+                                  : "text-gray-900"
+                              }`}
+                            >
+                              {bWins && <span aria-hidden="true">▲ </span>}
+                              {factor.display_b}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {(prediction.scouting_a || prediction.scouting_b) && (
+              <div className="mb-6">
+                <div className="text-sm font-semibold text-orange-500 uppercase tracking-wide mb-3">
+                  AI Scouting Reports
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <ScoutingCard
+                    name={playerA || "Player A"}
+                    report={prediction.scouting_a}
+                  />
+                  <ScoutingCard
+                    name={playerB || "Player B"}
+                    report={prediction.scouting_b}
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="text-gray-700 whitespace-pre-line leading-relaxed">
+              {prediction.reasoning}
+            </div>
+
+            {prediction.model_version && (
+              <div className="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-500">
+                Model: {prediction.model_version}
+              </div>
+            )}
           </motion.div>
         )}
       </motion.div>

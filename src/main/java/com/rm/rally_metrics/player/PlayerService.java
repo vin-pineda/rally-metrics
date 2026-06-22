@@ -1,23 +1,39 @@
 package com.rm.rally_metrics.player;
 
-import com.rm.rally_metrics.gemini.GeminiService;
-import jakarta.transaction.Transactional;
+import com.rm.rally_metrics.ai.MatchPrediction;
+import com.rm.rally_metrics.ai.agents.MatchAnalysis;
+import com.rm.rally_metrics.ai.agents.MatchAnalysisInput;
+import com.rm.rally_metrics.ai.agents.MatchAnalysisOrchestrator;
+import com.rm.rally_metrics.ai.agents.ScoutAgent;
+import com.rm.rally_metrics.ai.agents.ScoutReport;
+import com.rm.rally_metrics.error.NotFoundException;
+import com.rm.rally_metrics.prediction.DraftTier;
+import com.rm.rally_metrics.prediction.KeyFactor;
+import com.rm.rally_metrics.prediction.MatchEstimate;
+import com.rm.rally_metrics.prediction.MatchProbabilityModel;
+import com.rm.rally_metrics.prediction.PlayerStats;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
 public class PlayerService {
     private final PlayerRepository playerRepository;
-    private final GeminiService geminiService;
+    private final MatchProbabilityModel probabilityModel;
+    private final MatchAnalysisOrchestrator analysisOrchestrator;
+    private final ScoutAgent scoutAgent;
 
     @Autowired
-    public PlayerService(PlayerRepository playerRepository, GeminiService geminiService) {
+    public PlayerService(PlayerRepository playerRepository,
+                         MatchProbabilityModel probabilityModel,
+                         MatchAnalysisOrchestrator analysisOrchestrator,
+                         ScoutAgent scoutAgent) {
         this.playerRepository = playerRepository;
-        this.geminiService = geminiService;
+        this.probabilityModel = probabilityModel;
+        this.analysisOrchestrator = analysisOrchestrator;
+        this.scoutAgent = scoutAgent;
     }
 
     public List<Player> getPlayers() {
@@ -25,124 +41,89 @@ public class PlayerService {
     }
 
     public List<Player> getPlayersFromTeam(String teamName) {
-        return playerRepository.findAll().stream()
-                .filter(player -> player.getTeam() != null && player.getTeam().equalsIgnoreCase(teamName))
-                .collect(Collectors.toList());
-    }
-
-    public List<Player> getPlayersByName(String searchText) {
-        return playerRepository.findAll().stream()
-                .filter(player -> player.getName().toLowerCase().contains(searchText.toLowerCase()))
-                .collect(Collectors.toList());
+        return playerRepository.findByTeamIgnoreCase(teamName);
     }
 
     public List<Player> getPlayersByNameOrTeam(String searchText) {
-        String normalizedSearch = searchText.toLowerCase().trim();
-        return playerRepository.findAll().stream()
-                .filter(player ->
-                        player.getName().toLowerCase().contains(normalizedSearch) ||
-                                player.getTeam().toLowerCase().contains(normalizedSearch))
-                .collect(Collectors.toList());
+        return playerRepository.searchByNameOrTeam(searchText.trim());
     }
 
-    public Player addPlayer(Player player) {
-        playerRepository.save(player);
-        return player;
+    public MatchPrediction getPredictionBetweenPlayers(String playerA, String playerB) {
+        Player p1 = playerRepository.findByName(playerA)
+                .orElseThrow(() -> new NotFoundException("Player not found: " + playerA));
+        Player p2 = playerRepository.findByName(playerB)
+                .orElseThrow(() -> new NotFoundException("Player not found: " + playerB));
+
+        PlayerStats statsA = toStats(p1);
+        PlayerStats statsB = toStats(p2);
+
+        // All numbers are computed deterministically by the model; the agents only narrate them.
+        MatchEstimate estimate = probabilityModel.estimate(statsA, statsB);
+        List<KeyFactor> keyFactors = probabilityModel.keyFactors(statsA, statsB);
+        Player winner = estimate.winnerIsA() ? p1 : p2;
+        String confidence = estimate.confidence().name();
+
+        MatchAnalysis analysis = analysisOrchestrator.analyze(new MatchAnalysisInput(
+                p1.getName(), p1.getTeam(), statsA,
+                p2.getName(), p2.getTeam(), statsB,
+                winner.getName(), estimate.winProbability(), estimate.moneylineOdds(),
+                confidence, keyFactorsText(keyFactors)));
+
+        return new MatchPrediction(
+                winner.getName(), estimate.winProbability(), estimate.moneylineOdds(),
+                confidence, MatchProbabilityModel.MODEL_VERSION, keyFactors,
+                analysis.scoutA(), analysis.scoutB(), analysis.reasoning());
     }
 
-    public Player updatePlayer(Player updatedPlayer) {
-        Optional<Player> existingPlayer = playerRepository.findByName(updatedPlayer.getName());
-        if (existingPlayer.isPresent()) {
-            Player playerToUpdate = existingPlayer.get();
-            playerToUpdate.setName(updatedPlayer.getName());
-            playerToUpdate.setTeam(updatedPlayer.getTeam());
-            return playerRepository.save(playerToUpdate);
-        }
-        return null;
+    /**
+     * Structured player snapshot for the expandable row: a deterministic draft-tier verdict plus
+     * the player's scouting report (reused from the same cached/warmed scout the predictor uses,
+     * so there is no extra LLM call per view and the two surfaces stay consistent).
+     */
+    public PlayerSnapshot getSummaryForPlayer(String playerName) {
+        Player player = playerRepository.findByName(playerName)
+                .orElseThrow(() -> new NotFoundException("Player not found: " + playerName));
+
+        PlayerStats stats = toStats(player);
+        DraftTier tier = probabilityModel.draftTier(stats);
+        int skillRating = probabilityModel.skillRating(stats);
+
+        // League benchmarks — computed once from the full field so they're identical on every page.
+        List<Player> league = playerRepository.findAll();
+        int leagueSize = league.size();
+        int avgSkillRating = (int) Math.round(league.stream()
+                .mapToInt(p -> probabilityModel.skillRating(toStats(p))).average().orElse(skillRating));
+        double leagueAvgWinPct = round1(league.stream()
+                .mapToDouble(p -> nzd(p.getGamesWonPercent())).average().orElse(0.0));
+        double leagueAvgPtWinPct = round1(league.stream()
+                .mapToDouble(p -> nzd(p.getPtsWonPercent())).average().orElse(0.0));
+
+        ScoutReport scouting = scoutAgent.scout(player.getName(), player.getTeam(), stats);
+        return new PlayerSnapshot(tier, skillRating, leagueSize,
+                avgSkillRating, leagueAvgWinPct, leagueAvgPtWinPct, scouting);
     }
 
-    public String getPredictionBetweenPlayers(String playerA, String playerB) {
-        Optional<Player> a = playerRepository.findByName(playerA);
-        Optional<Player> b = playerRepository.findByName(playerB);
-
-        if (a.isEmpty() || b.isEmpty()) {
-            return "One or both players not found.";
-        }
-
-        Player p1 = a.get();
-        Player p2 = b.get();
-
-        double p1WinRate = p1.getGamesWonPercent();
-        double p2WinRate = p2.getGamesWonPercent();
-
-        int p1Odds = calculateMoneylineOdds(p1WinRate, p2WinRate);
-        int p2Odds = calculateMoneylineOdds(p2WinRate, p1WinRate);
-
-        String winner = p1WinRate >= p2WinRate ? p1.getName() : p2.getName();
-
-        String prompt = String.format("""
-        You are a fantasy sports analyst. Predict who would win in a Major League Pickleball match between:
-
-        1. %s (Team: %s, Games Won: %d, Games Lost: %d, Points Won: %d, Points Lost: %d) — Odds: %s%d
-
-        2. %s (Team: %s, Games Won: %d, Games Lost: %d, Points Won: %d, Points Lost: %d) — Odds: %s%d
-
-        Write two short paragraphs comparing both players’ strengths and weaknesses. Then on a separate line, include:
-        "🎯 Prediction: %s will likely win this match."
-
-        Be bold and base your analysis on stats only.
-        """,
-                p1.getName(), p1.getTeam(), p1.getGamesWon(), p1.getGamesLost(), p1.getPtsWon(), p1.getPtsLost(),
-                (p1Odds >= 0 ? "+" : ""), p1Odds,
-
-                p2.getName(), p2.getTeam(), p2.getGamesWon(), p2.getGamesLost(), p2.getPtsWon(), p2.getPtsLost(),
-                (p2Odds >= 0 ? "+" : ""), p2Odds,
-
-                winner
-        );
-
-        return geminiService.generateCustomContent(prompt);
+    private static double round1(double v) {
+        return Math.round(v * 10.0) / 10.0;
     }
 
-    private int calculateMoneylineOdds(double winPct1, double winPct2) {
-        double prob = winPct1 / (winPct1 + winPct2);
-        if (prob >= 0.5) {
-            return (int) Math.round(-100 * prob / (1 - prob));
-        } else {
-            return (int) Math.round(100 * (1 - prob) / prob);
-        }
+    private static double nzd(Double value) {
+        return value == null ? 0.0 : value;
     }
 
-
-    @Transactional
-    public void deletePlayer(String playerName) {
-        playerRepository.deleteByName(playerName);
+    private static String keyFactorsText(List<KeyFactor> factors) {
+        return factors.stream()
+                .map(f -> String.format("- %s: A=%s, B=%s (edge: %s)",
+                        f.label(), f.displayA(), f.displayB(), f.advantage()))
+                .collect(Collectors.joining("\n"));
     }
-    public String getSummaryForPlayer(String playerName) {
-        Optional<Player> optionalPlayer = playerRepository.findAll().stream()
-                .filter(p -> p.getName().equalsIgnoreCase(playerName))
-                .findFirst();
 
-        if (optionalPlayer.isEmpty()) return "Player not found";
+    private static PlayerStats toStats(Player p) {
+        return new PlayerStats(nz(p.getGamesWon()), nz(p.getGamesLost()),
+                nz(p.getPtsWon()), nz(p.getPtsLost()));
+    }
 
-        Player player = optionalPlayer.get();
-
-        int gamesWon = player.getGamesWon();
-        int gamesLost = player.getGamesLost();
-        int ptsWon = player.getPtsWon();
-        int ptsLost = player.getPtsLost();
-
-        String recentStats = String.format("Games won: %d, Games lost: %d, Points won: %d, Points lost: %d",
-                gamesWon, gamesLost, ptsWon, ptsLost);
-
-        String styleHint = "Based on win/loss ratio and points";
-
-        int totalGames = gamesWon + gamesLost;
-
-        String baseSummary = geminiService.generatePlayerSummary(
-                player.getName(), player.getTeam(), recentStats, styleHint
-        );
-
-        return baseSummary;
+    private static int nz(Integer value) {
+        return value == null ? 0 : value;
     }
 }

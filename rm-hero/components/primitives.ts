@@ -10,7 +10,6 @@ export const title = tv({
       cyan: "from-[#00b7fa] to-[#01cfea]",
       green: "from-[#6FEE8D] to-[#17c964]",
       pink: "from-[#FF72E1] to-[#F54C7A]",
-    
     },
     size: {
       sm: "text-3xl lg:text-4xl",
@@ -26,14 +25,7 @@ export const title = tv({
   },
   compoundVariants: [
     {
-      color: [
-        "violet",
-        "yellow",
-        "blue",
-        "cyan",
-        "green",
-        "pink",
-      ],
+      color: ["violet", "yellow", "blue", "cyan", "green", "pink"],
       class: "bg-clip-text text-transparent bg-gradient-to-b",
     },
   ],

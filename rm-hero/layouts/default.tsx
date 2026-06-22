@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "@heroui/link";
 
 import { Navbar } from "@/components/navbar";
+
 import { Head } from "./head";
 
 export default function DefaultLayout({

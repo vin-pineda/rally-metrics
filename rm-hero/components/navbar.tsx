@@ -26,8 +26,10 @@ export const Navbar = () => {
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
+
     handleResize();
     window.addEventListener("resize", handleResize);
+
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -53,6 +55,7 @@ export const Navbar = () => {
         value={searchText}
         onChange={(e) => {
           const value = e.target.value;
+
           setSearchText(value);
 
           if (value === "") {
@@ -86,7 +89,7 @@ export const Navbar = () => {
                 <NextLink
                   className={clsx(
                     linkStyles({ color: "foreground" }),
-                    "data-[active=true]:text-primary data-[active=true]:font-medium"
+                    "data-[active=true]:text-primary data-[active=true]:font-medium",
                   )}
                   href={item.href}
                 >
