@@ -47,10 +47,5 @@ build/
 ### Claude Code / session scratch (not part of the project) ###
 .playwright-mcp/
 docs/screenshots/
-# Raw Playwright accessibility-tree dumps from verification sessions
-pl-refs.md
-pl2.md
-pl3.md
-players-refs.md
-predictor-refs.md
-predictor-result-snapshot.md
+# Loose verification scratch (Playwright accessibility-tree dumps, etc.)
+scratch/
