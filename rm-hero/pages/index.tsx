@@ -103,7 +103,7 @@ export default function IndexPage() {
         </motion.div>
       </div>
 
-      <section className="relative z-10 py-14 px-6 md:py-20 md:px-10 flex flex-col md:flex-row items-center text-center md:text-left gap-12 md:gap-20">
+      <section className="relative z-10 py-10 px-6 md:py-12 md:px-10 flex flex-col md:flex-row items-center text-center md:text-left gap-12 md:gap-20">
         <motion.div
           animate={{ opacity: 1, y: 0 }}
           className="w-full md:w-1/2 flex justify-center"
@@ -128,13 +128,15 @@ export default function IndexPage() {
           <h1
             className={`${title({ size: "sm" })} tracking-tight leading-tight`}
           >
-            The{" "}
+            Major League Pickleball,{" "}
             <span className={title({ color: "yellow", size: "sm" })}>
-              smartest
+              quantified
             </span>{" "}
-            way to draft your{" "}
-            <span className={title({ color: "yellow", size: "sm" })}>MLP</span>{" "}
-            fantasy team starts here.
+            and{" "}
+            <span className={title({ color: "yellow", size: "sm" })}>
+              ranked
+            </span>
+            .
           </h1>
           <p className={subtitle()}>
             Built for the stats-driven pickleball fan
@@ -152,7 +154,7 @@ export default function IndexPage() {
         </motion.div>
       </section>
 
-      <section className="pt-12 pb-28 px-6 md:px-10 relative z-10">
+      <section className="pt-4 pb-12 px-6 md:px-10 relative z-10">
         <div className="grid gap-10 grid-cols-1 md:grid-cols-3">
           {cardConfig.map((item, index) => (
             <motion.div

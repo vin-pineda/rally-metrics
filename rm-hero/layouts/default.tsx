@@ -20,7 +20,7 @@ export default function DefaultLayout({
       <Head />
       <Navbar />
       <main className="flex-grow overflow-auto">
-        <div className="container mx-auto max-w-7xl px-6 pt-16 pb-40">
+        <div className="container mx-auto max-w-7xl px-6 pt-16 pb-16">
           {children}
         </div>
       </main>

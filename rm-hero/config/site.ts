@@ -18,10 +18,6 @@ export const siteConfig = {
       label: "Match Predictor",
       href: "/predictor",
     },
-    {
-      label: "About",
-      href: "/about",
-    },
   ],
   links: {
     github: "https://github.com/vin-pineda",
